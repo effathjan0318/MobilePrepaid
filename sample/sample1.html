@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <title>Recharge Page</title>
+    <style>
+        body {
+            background-color: #f4f7fc;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #6a7f9b;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #000000;
+        }
+        .recharge-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../img/logo.png" alt="Logo" width="150"> 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-house-door"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-grid"></i> View Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightning-fill"></i> Recharge</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./userLogin.html"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="../img/mp1.jpg" class="d-block w-100" alt="Slide 1">
+                <div class="carousel-caption">
+                    <h5>Fast and Secure Recharge</h5>
+                    <p>Recharge your phone instantly with our trusted service.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="../img/mp2.jpg" class="d-block w-100" alt="Slide 2">
+                <div class="carousel-caption">
+                    <h5>Exciting Offers</h5>
+                    <p>Get the best deals and cashback on every recharge.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="../img/mp3.jpg" class="d-block w-100" alt="Slide 3">
+                <div class="carousel-caption">
+                    <h5>Multiple Payment Options</h5>
+                    <p>Pay using UPI, cards, or wallets securely.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+    
+    <div class="recharge-section">
+        <h3 class="text-center">Recharge Your Number</h3>
+        <form>
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number">
+            </div>
+            <div class="mb-3">
+                <label for="operator" class="form-label">Select Operator</label>
+                <select class="form-select" id="operator">
+                    <option selected>Choose...</option>
+                    <option value="airtel">Airtel</option>
+                    <option value="jio">Jio</option>
+                    <option value="vi">Vi</option>
+                    <option value="bsnl">BSNL</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Enter Amount</label>
+                <input type="number" class="form-control" id="amount" placeholder="Enter recharge amount">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Proceed to Recharge</button>
+        </form>
+    </div>
+</body>
+</html>

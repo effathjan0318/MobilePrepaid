@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Recharge Page</title>
+    <style>
+        body {
+            background-color: #d5cee6;    
+            /* background: url('../img/Adobe\ Express\ -\ file.png') no-repeat center ;    */
+                 
+            /* font-family: Arial, sans-serif; */
+            font-family: "Lato", serif;
+            
+        }
+        .lato-light {
+            font-family: "Lato", serif;
+            font-weight: 300;
+            font-style: normal;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #54388b;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #000000;
+        }
+        .container-wide {
+            max-width: 1000px;
+        }
+        .container-recharge {
+            max-width: 500px;
+        }
+        .recharge-section, .popular-plans, .customer-reviews {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+        }
+        .pack-details{
+            display: flex;
+            justify-content: space-evenly;
+        }
+        .btn{
+            background-color: #54388b;
+            border: none;
+        }
+        .btn:hover{
+            background-color: #432e6d;
+        }
+        .footer {
+        background-color: #54388b;
+        color: white;
+        padding: 30px 0;
+        font-size: 14px;
+    }
+
+    .footer h5 {
+        color: #f4f7fc;
+        font-size: 23px;
+        margin-bottom: 15px;
+    }
+
+    .footer hr {
+        border: 1px solid #ffffff;
+        width: 50px;
+        margin-bottom: 15px;
+    }
+
+    .footer a {
+        color: #feffff;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .footer a:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+    .hero-section {
+            background: url('../img/h2.png') no-repeat center center/cover;
+            color: white;
+            text-align: left;
+            /* padding-left: 40px; */
+            padding: 100px 50px;
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .hero-section .btn {
+            background-color: #54388b;
+            border-color: #54388b;
+            /* border: none; */
+        }
+        .hero-section .btn:hover {
+            /* background-color: #6e4eaf; */
+            border-color: #feffff;
+            box-shadow: 0px 0px 5px #feffff;
+        }
+        .about-section {
+            background: #ffffff;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .about-section img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../img/logo.png" alt="Logo" width="150"> 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-house-door"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-grid"></i> View Plans</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightning-fill"></i> Recharge</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./userLogin.html"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1>Recharge Your Mobile <br> Instantly</h1>
+        <p>Fast, Secure, and Reliable Recharge Service</p>
+        <a href="./userLogin.html" class="btn btn-primary btn-lg">Login</a>
+    </section>
+
+
+    <!-- Recharge Section -->
+    <section class="container-recharge recharge-section text-center">
+        <h2>Recharge Your Mobile</h2>
+        <input type="text" class="form-control mb-2" placeholder="Enter Mobile Number">
+        <button class="btn btn-primary">Recharge Now</button>
+    </section>
+
+    <!-- Popular Plans Section -->
+    <section class="container-wide popular-plans text-center my-4">
+        <h2>Most Popular Plans</h2>
+        <div class="row">
+            <div class="col-md-8 col-lg-4">
+                <div class="card p-3">
+                    <h2>₹299</h2>
+                    <br>
+                    <div class="pack-details">
+                        <p><b>Validity:</b> 30 Days</p>
+                        <p><b>Data:</b> 2GB/day</p>
+                    </div>
+                    <button class="btn btn-primary">Recharge</button>
+                </div>
+            </div>
+            <div class="col-md-8 col-lg-4">
+                <div class="card p-3">
+                    <h2>₹299</h2>
+                    <br>
+                    <div class="pack-details">
+                        <p><b>Validity:</b> 30 Days</p>
+                        <p><b>Data:</b> 2GB/day</p>
+                    </div>
+                    <button class="btn btn-primary">Recharge</button>
+                </div>
+            </div>
+            <div class="col-md-8 col-lg-4">
+                <div class="card p-3">
+                    <h2>₹299</h2>
+                    <br>
+                    <div class="pack-details">
+                        <p><b>Validity:</b> 30 Days</p>
+                        <p><b>Data:</b> 2GB/day</p>
+                    </div>
+                    <button class="btn btn-primary">Recharge</button>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Customer Reviews Section -->
+    <section class="container-wide customer-reviews text-center my-4">
+        <h2>Customer Reviews</h2>
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 d-flex flex-column align-items-center">
+                    <img src="../img/review3.png" alt="profile pic" style="height: 150px;width: 150px;">
+                    <p>"Great service! Quick and reliable."</p>
+                    <h5>- John Doe</h5>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 d-flex flex-column align-items-center">
+                    <img src="../img/review4.png" alt="profile pic" style="height: 150px;width: 150px;">
+                    <p>"Great service! Quick and reliable."</p>
+                    <h5>- John Doe</h5>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 d-flex flex-column align-items-center">
+                    <img src="../img/review5.png" alt="profile pic" style="height: 150px;width: 150px;">
+                    <p>"Best recharge platform with amazing offers!"</p>
+                    <h5>- Jane Smith</h5>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 d-flex flex-column align-items-center">
+                    <img src="../img/review6.jpg" alt="profile pic" style="height: 150px;width: 150px;">
+                    <p>"Best recharge platform with amazing offers!"</p>
+                    <h5>- Jane Smith</h5>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="../img/abt us.jpg" alt="About Us">
+                </div>
+                <div class="col-md-6">
+                    <h2>About Prepaid Plus</h2>
+                    <p>Welcome to Prepaid Plus, your trusted partner for seamless and secure mobile recharges. We are dedicated to providing a hassle-free experience with the latest offers and reliable services.</p>
+                    <p>With a user-friendly interface and secure transactions, we ensure that you stay connected without any interruptions. Our commitment is to offer quick, efficient, and affordable solutions for all your prepaid needs.</p>
+                    <p>Join thousands of satisfied customers who rely on us for their mobile recharge needs. Experience convenience like never before!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+    
+             
+                <div class="col-md-3">
+                    <h5>About Prepaid Plus</h5>
+                    <hr>
+                    <p>Welcome to Prepaid Plus, your one-stop solution for seamless mobile recharges and prepaid management. We provide fast, secure, and hassle-free recharge services with a user-friendly experience.</p>
+                </div>
+                
+                <div class="col-md-3">
+                    <h5>Our Offerings</h5>
+                    <hr>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Prepaid</a></li>
+                        <li><a href="#">Get New SIM</a></li>
+                        <li><a href="#">Set AutoPay</a></li>
+                    </ul>
+                </div>
+    
+              
+                <div class="col-md-3">
+                    <h5>Support</h5>
+                    <hr>
+                    <ul class="list-unstyled">
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Lost SIM</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+    
+                <div class="col-md-3">
+                    <h5>Connect with Us</h5>
+                    <hr>
+                    <p><i class="bi bi-geo-alt-fill"></i> Tamil Nadu, India</p>
+                    <p><i class="bi bi-envelope-fill"></i> prepaidplus@info.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 77068 55467</p>
+    
+            
+                    <div class="social-icons mt-3">
+                        <a href="#" class="me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+    
+            </div>
+    
+        </div>
+    </div>
+</body>
+</html>

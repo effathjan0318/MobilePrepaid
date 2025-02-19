@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Plans</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #54388b;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Prepaid Plus</a>
+        </div>
+    </nav>
+    
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Choose Your Best Plan</h2>
+        <div class="mb-3">
+            <label for="filter" class="form-label">Filter Plans:</label>
+            <select class="form-select" id="filter" onchange="filterPlans()">
+                <option value="all">All Plans</option>
+                <option value="popular">Popular</option>
+                <option value="unlimited">Truly Unlimited</option>
+                <option value="data">Data Add-on</option>
+                <option value="topup">Top-up</option>
+            </select>
+        </div>
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Plan Name</th>
+                    <th>Price</th>
+                    <th>Data</th>
+                    <th>Validity</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody id="plansTable">
+                <tr data-category="popular">
+                    <td>Plan A</td>
+                    <td>$10</td>
+                    <td>2GB</td>
+                    <td>30 Days</td>
+                    <td>Popular</td>
+                </tr>
+                <tr data-category="unlimited">
+                    <td>Plan B</td>
+                    <td>$25</td>
+                    <td>Unlimited</td>
+                    <td>60 Days</td>
+                    <td>Truly Unlimited</td>
+                </tr>
+                <tr data-category="data">
+                    <td>Plan C</td>
+                    <td>$5</td>
+                    <td>1GB</td>
+                    <td>7 Days</td>
+                    <td>Data Add-on</td>
+                </tr>
+                <tr data-category="topup">
+                    <td>Plan D</td>
+                    <td>$3</td>
+                    <td>-</td>
+                    <td>Talktime</td>
+                    <td>Top-up</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        function filterPlans() {
+            let category = document.getElementById("filter").value;
+            let rows = document.querySelectorAll("#plansTable tr");
+            rows.forEach(row => {
+                if (category === "all" || row.getAttribute("data-category") === category) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
