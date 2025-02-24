@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Plans</title>
+    <title>Recharge</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
+        html, body {
+            overflow-x: hidden;  
+        }
         body {
             background-color: #f8f9fa;
+            /* margin: 0; */
+            /* padding: 0%; */
         }
         .navbar {
             background-color: #ffffff;
@@ -23,13 +28,12 @@
         .navbar-nav .nav-link:hover {
             color: #000000;
         }
+    
         .hero-section {
             background: url('../img/h3.png') no-repeat center center/cover;
-            
             color: white;
             text-align: left;
-            /* padding-left: 40px; */
-            padding: 100px 50px;
+            padding: 80px 30px;
         }
         .hero-section h1 {
             font-size: 3rem;
@@ -145,21 +149,21 @@
         .modal .btn:hover{
             background-color: #352457;
         }
-        .recharge-section{
+        .recharge-section {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
-            width: 500px;
-            /* height: 500px; */
+            max-width: 500px;  /* Limits max width but keeps it responsive */
+            width: 100%; /* Ensures it adapts to smaller screens */
         }
-        .recharge-section button{
-            background:#54388b;
+        .recharge-section button {
+            background: #54388b;
             border: none;
         }
-        .recharge-section button:hover{
-            background:#352457;
+        .recharge-section button:hover {
+            background: #352457;
         }
         @keyframes fadeSlideUp {
         from {
@@ -217,39 +221,43 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle"></i> Account
+                            <i class="bi bi-person-circle"></i> <span id="loggedInUser">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
-                            <li><a class="dropdown-item" href="#" style="color: red;"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                            <li><a class="dropdown-item" href="#" style="color: red;" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section text-center text-lg-start">
         <h1>One-time recharge for <br> 1 full year</h1>
         <p>Recharge with a ₹3499 for a year full of digital delights</p>
         <a href="#" class="btn btn-primary btn-lg">Get the best Annual Plan</a>
     </section>
+
     <!--Recharge number-->
-    <section class="container-recharge recharge-section text-center">
-        <h2>Recharge Mobile</h2>
-        <input type="text" class="form-control mb-2" placeholder="Enter Mobile Number">
-        <a href="#LovedPlans">
-            <button class="btn btn-primary">Recharge Now</button>
-        </a>
-        
+    <section class="container text-center my-4">
+        <div class="recharge-section mx-auto p-3 p-md-4">
+            <h2>Recharge Mobile</h2>
+            <input type="text" id="phoneNo" class="form-control mb-2" placeholder="Enter Mobile Number">
+            <p id="errorMessage" class="text-danger mt-2"></p>
+            <button class="btn btn-primary w-100" onclick="validateAndCheckUser()">Recharge Now</button>
+        </div>
     </section>
+    
+    
 
 
     <!-- Most Loved Section -->
     <section class="container-wide popular-plans text-center my-4">
         <h2>Most Loved Plans</h2>
         <div id="LovedPlans" class="row">
-            <div class="col-md-8 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="card p-3">
                     <h2>₹299</h2>
                     <br>
@@ -260,7 +268,7 @@
                     <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
                 </div>
             </div>
-            <div class="col-md-8 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="card p-3">
                     <h2>₹299</h2>
                     <br>
@@ -271,7 +279,7 @@
                     <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
                 </div>
             </div>
-            <div class="col-md-8 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="card p-3">
                     <h2>₹299</h2>
                     <br>
@@ -288,7 +296,7 @@
     <hr>
     <!-- filter and Plans Section -->
     <div class="container my-5 row" >
-        <div class="left col-md-3 mt-5">
+        <div class="left col-12 col-md-3 mt-5">
             <h4>Filters</h4>
             <label for="priceRange" class="form-label">Price Range:</label>
             <input type="range" class="form-range" id="priceRange" min="10" max="1000" step="5" onchange="filterPlans()">
@@ -309,169 +317,48 @@
             </select>
         </div>
 
-        <div class="right col-md-9">
+        <div class="right col-12 col-md-9">
             <h2 class="text-center mb-4">Choose Your Best Plan</h2>
+            <!-- Navigation Tabs -->
             <ul class="nav nav-tabs" id="planTabs">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#all">All Plans</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#popular">Popular</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#unlimited">Truly Unlimited</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#data">Data Add-on</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#topup">Top-up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#annual">Annual Plans</a>
-                </li>
+                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#all">All Plans</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#popular">Popular</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#unlimited">Truly Unlimited</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#data">Data Add-on</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#topup">Top-up</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#annual">Annual Plans</a></li>
             </ul>
-            <div class="tab-content mt-3">
+            
+            <!-- <div class="tab-content mt-3">
                 <div class="tab-pane fade show active" id="all">
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
-
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
-
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
+                    <div id="planList"></div>
                 </div>
                 <div class="tab-pane fade" id="popular">
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
+                    <div id="popularPlans"></div>
                 </div>
                 <div class="tab-pane fade" id="unlimited">
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
+                    <div id="unlimitedPlans"></div>
                 </div>
                 <div class="tab-pane fade" id="data">
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
+                    <div id="dataPlans"></div>
                 </div>
                 <div class="tab-pane fade" id="topup">
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
+                    <div id="topupPlans"></div>
                 </div>
                 <div class="tab-pane fade" id="annual">
-                    <div class="plan">
-                        <h2>₹299</h2><hr>
-                        <br>
-                        <div class="pack-details d-flex flex-row gap-5">
-                            <p><b>Validity:</b> 30 Days</p>
-                            <p><b>Data:</b> 2GB/day</p>
-                            <p><b>Calls:</b> Unlimited</p>
-                        </div>
-                        <!-- <button class="btn btn-primary">Recharge</button> -->
-                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
-                    </div>
+                    <div id="annualPlans"></div>
                 </div>
-            </div>
+            </div> -->
 
-        </div>
-    </div>
+            <div class="tab-content mt-3" id="plansContainer"></div>
 
-    <!-- modal section -->
-    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailsModalLabel">Plan Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modalBody">
-                    <p>More details about the selected plan will be shown here.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="redirectToPayment()">Recharge</button>
-                </div>
-            </div>
         </div>
     </div>
 
     <!-- footer section -->
     <div class="footer">
         <div class="container">
-            <div class="row">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
     
              
                 <div class="col-md-3">
@@ -525,30 +412,168 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".view-details").forEach(function (btn) {
-                btn.addEventListener("click", function () {
-                    let planName = this.getAttribute("data-plan");
-                    let validity = this.getAttribute("data-validity");
-                    let data = this.getAttribute("data-data");
-                    let calls = this.getAttribute("data-calls");
-                    
-                    document.getElementById("modalBody").innerHTML = `<p><strong>Plan:</strong> ${planName}</p>
-                        <p><strong>Validity:</strong> ${validity}</p>
-                        <p><strong>Data:</strong> ${data}</p>
-                        <p><strong>Calls:</strong> ${calls}</p>`;
-
-                    new bootstrap.Modal(document.getElementById("detailsModal")).show();
-                });
-            });
-        });
 
         function redirectToPayment(){
             window.location.href = "payment.html"; 
         }
-        // document.getElementsByClassName("btn").addEventListener("click", function () {
-        // window.location.href = "payment.html"; 
-        // });
+        function logoutUser() {
+        localStorage.removeItem("phoneNo"); 
+        window.location.href = "userLogin.html"; 
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        let phoneNo = localStorage.getItem("phoneNo");
+        let loggedInUser=localStorage.getItem("loggedInUser");
+        if (loggedInUser) {
+            document.getElementById("loggedInUser").textContent = JSON.parse(loggedInUser).name;
+    
+        }
+        if (phoneNo) {
+            document.getElementById("phoneNo").textContent = phoneNo;
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let storedPhone = localStorage.getItem("phoneNo");
+        if (storedPhone) {
+            document.getElementById("phoneNo").value = storedPhone;
+        }
+    });
+
+    async function validateAndCheckUser() {
+        let phoneInput = document.getElementById("phoneNo");
+        let phone = phoneInput.value.trim();
+        let errorMessage = document.getElementById("errorMessage");
+
+        let phoneRegex = /^[6-9]\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            errorMessage.textContent = "Invalid phone number! Enter a valid 10-digit number.";
+            return;
+        }
+
+        try {
+            let response = await fetch("user.json");
+            let users = await response.json();
+            console.log(users);
+            let userExists = users.some(user => user.number === phone);
+            if (userExists) {
+                errorMessage.textContent = ""; 
+                window.location.href = "#LovedPlans"; 
+            } else {
+                errorMessage.textContent = "Phone number not registered!";
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            errorMessage.textContent = "Error fetching user data. Try again later.";
+        }
+    }
+
+
+    let allPlans = [];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("plans.json")
+            .then(response => response.json())
+            .then(data => {
+                allPlans = data;
+                updateActiveTab(allPlans);
+            });
+
+        document.querySelectorAll(".nav-link").forEach(tab => {
+            tab.addEventListener("click", function () {
+                setTimeout(() => updateActiveTab(), 100);
+            });
+        });
+    });
+
+    function updateActiveTab(filteredPlans = allPlans) {
+        let activeTab = document.querySelector('.nav-link.active').getAttribute('href').substring(1);
+        let categoryPlans = activeTab === "all" ? filteredPlans : filteredPlans.filter(plan => plan.category === activeTab);
+        displayPlans(categoryPlans);
+    }
+
+    function filterPlans() {
+        let maxPrice = document.getElementById("priceRange").value;
+        document.getElementById("priceValue").textContent = `₹10 - ₹${maxPrice}`;
+        let selectedNetwork = document.getElementById("networkType").value;
+        let selectedTalktime = document.getElementById("talktime").value;
+
+        let filteredPlans = allPlans.filter(plan => 
+            plan.price <= maxPrice &&
+            (selectedNetwork === "all" || plan.network === selectedNetwork) &&
+            (selectedTalktime === "all" || plan.talktime === selectedTalktime)
+        );
+
+        updateActiveTab(filteredPlans);
+    }
+
+    function displayPlans(plans) {
+        let container = document.getElementById("plansContainer");
+        container.innerHTML = "";
+
+        if (plans.length === 0) {
+            container.innerHTML = "<p class='text-center'>No plans available.</p>";
+            return;
+        }
+
+        plans.forEach(plan => {
+            let planHTML = `
+                <div class="plan">
+                    <h3>₹${plan.price}</h3>
+                    <div class="d-flex fex-row gap-5">
+                        <p><b>Validity:</b> ${plan.validity}</p>
+                        <p><b>Data:</b> ${plan.data}</p>
+                        <p><b>Calls:</b> ${plan.calls}</p>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary" onclick="viewPlanDetails(${plan.id})">View Details</button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += planHTML;
+        });
+    }
+
+    function viewPlanDetails(planId) {
+        let plan = allPlans.find(p => p.id === planId);
+        if (!plan) return;
+
+        let modalHTML = `
+    <div class="modal fade" id="planModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Plan Details - ₹${plan.price}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><b>Validity:</b> ${plan.validity}</p>
+                    <p><b>Data:</b> ${plan.data}</p>
+                    <p><b>Calls:</b> ${plan.calls}</p>
+                    <p><b>Network:</b> ${plan.network.toUpperCase()}</p>
+                    <p><b>Talktime:</b> ${plan.talktime === "yes" ? "Included" : "Not Included"}</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="./payment.html?amount=${plan.price}">
+                        <button class="btn btn-success">Proceed to Recharge</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+`;
+
+
+
+        document.body.insertAdjacentHTML("beforeend", modalHTML);
+        let planModal = new bootstrap.Modal(document.getElementById("planModal"));
+        planModal.show();
+        
+        document.getElementById("planModal").addEventListener("hidden.bs.modal", function () {
+            document.getElementById("planModal").remove();
+        });
+    }
+
     </script>
 </body>
 </html>

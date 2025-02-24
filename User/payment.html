@@ -3,49 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recharge Payment</title>
+    <title>Payment</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
+        body { background-color: #f8f9fa; }
         .payment-container {
-            /* max-width: 450px; */
             background: #ffffff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 50px;
         }
-        .btn-primary {
-            background-color:#54388b ;
-            border: none;
+        .btn-primary { background-color: #54388b; border: none; }
+        .btn-primary:hover { background-color: #432e6d; }
+        .error { color: red; font-size: 0.9em; }
+
+        @media (max-width: 768px) {
+            .payment-container { padding: 20px; width: 100%; }
+            .btn-primary { padding: 8px; font-size: 14px; }
         }
-        .btn-primary:hover {
-            background-color: #432e6d;
-        }
-        .modal-content {
-            border-radius: 10px;
-        }
-        .payment-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .payment-option {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .payment-option:hover {
-            background: #f0f0f0;
-        }
-        .payment-option input {
-            margin-right: 10px;
+        
+        @media (max-width: 480px) {
+            .payment-container { padding: 15px; }
+            .btn-primary { padding: 8px; font-size: 12px; }
         }
     </style>
 </head>
@@ -54,85 +37,78 @@
         <div class="payment-container">
             <h4 class="text-center mb-4">Select Payment Method</h4>
             <div class="row">
-            <img class="col-6" src="../img/pay1.avif" alt="secure payment">
-            <form id="paymentForm"class="col-6 overflow-auto" style="height: 400px;">
-                <div class="mb-3">
-                    <label for="planAmount" class="form-label"><b>Amount</b></label>
-                    <input type="text" id="planAmount" class="form-control" readonly>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label"><b>Payment Method</b></label>
-                    <div class="payment-options">
-                        <label class="payment-option">
-                            <input type="radio" name="paymentMethod" value="upi" required> UPI
-                        </label>
-                        <div id="upi"></div>
-
-                        <label class="payment-option">
-                            <input type="radio" name="paymentMethod" value="credit_card"> Credit Card
-                        </label>
-                        <div id="cc"></div>
-
-                        <label class="payment-option">
-                            <input type="radio" name="paymentMethod" value="net_banking"> Net Banking
-                        </label>
+                <img class="col-6" src="../img/pay1.avif" alt="secure payment">
+                <form id="paymentForm" class="col-6 overflow-auto" style="height: 330px; width: 450px;">
+                    <div class="mb-3">
+                        <label for="planAmount" class="form-label"><b>Amount</b></label>
+                        <input type="text" id="planAmount" class="form-control" readonly>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Proceed to Pay</button>
-            </form>
+                    <div class="mb-3">
+                        <label class="form-label"><b>Payment Method</b></label>
+                        <div class="payment-options">
+                            <label><input type="radio" name="paymentMethod" value="upi" required> UPI</label>
+                            <div id="upi"></div>
+                            <label><input type="radio" name="paymentMethod" value="credit_card"> Credit Card</label>
+                            <div id="cc"></div>
+                            <label><input type="radio" name="paymentMethod" value="net_banking"> Net Banking</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Proceed to Pay</button>
+                </form>
             </div>
         </div>
     </div>
 
     <!-- Invoice Modal -->
-    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal fade" id="invoiceModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header text-white" style="background-color: #54388b;" >
-                    <h5 class="modal-title" id="invoiceModalLabel">Payment Invoice</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header text-white" style="background-color: #54388b;">
+                    <h5 class="modal-title">Payment Invoice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" id="invoiceDetails">
-                    <p>Payment details will be displayed here.</p>
-                </div>
+                <div class="modal-body" id="invoiceDetails"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="window.print()">Download Invoice</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="redirectToRecharge()" >Close</button>
+                    <button type="button" class="btn btn-success" onclick="downloadInvoice()">Download Invoice</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const params = new URLSearchParams(window.location.search);
-            const planAmount = params.get("amount") || "₹299";
-            document.getElementById("planAmount").value = planAmount;
-        });
+        // const { jsPDF } = window.jspdf;
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById("planAmount").value = params.get("amount") || "₹299";
 
-        document.querySelectorAll("input[name='paymentMethod']").forEach((radio) => {
+        // const params = new URLSearchParams(window.location.search);
+        // document.getElementById("planAmount").value = params.get("amount") || "₹299";
+
+        document.querySelectorAll("input[name='paymentMethod']").forEach(radio => {
             radio.addEventListener("change", function () {
-                const paymentMethod = this.value;
-                const upi = document.getElementById("upi");
-                const cc = document.getElementById("cc");
-                upi.innerHTML = "";
-                cc.innerHTML = "";
+                document.getElementById("upi").innerHTML = "";
+                document.getElementById("cc").innerHTML = "";
 
-                if (paymentMethod === "upi") {
-                    upi.innerHTML ='<label class="form-label">Select UPI App</label>' +
-                        '<select id="upiApp" class="form-select" required>' +
-                        '<option value="phonepe">PhonePe</option>' +
-                        '<option value="googlepay">Google Pay</option>' +
-                        '</select>' +
-                        '<label for="upiId" class="form-label mt-2">UPI ID</label>' +
-                        '<input type="text" id="upiId" class="form-control" required>';
-                } else if (paymentMethod === "credit_card") {
-                    cc.innerHTML = '<label for="cardNumber" class="form-label">Card Number</label>' +
-                        '<input type="text" id="cardNumber" class="form-control" required>' +
-                        '<label for="expiryDate" class="form-label">Expiry Date</label>' +
-                        '<input type="text" id="expiryDate" class="form-control" required>' +
-                        '<label for="cvv" class="form-label">CVV</label>' +
-                        '<input type="text" id="cvv" class="form-control" required>';
+                if (this.value === "upi") {
+                    document.getElementById("upi").innerHTML = `
+                        <label>Select UPI App</label>
+                        <select id="upiApp" class="form-select" required>
+                            <option value="phonepe">PhonePe</option>
+                            <option value="googlepay">Google Pay</option>
+                        </select>
+                        <label for="upiId">UPI ID</label>
+                        <input type="text" id="upiId" class="form-control" required>
+                        <span id="upiError" class="error"></span>
+                    `;
+                } else if (this.value === "credit_card") {
+                    document.getElementById("cc").innerHTML = `
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" class="form-control" required>
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" class="form-control" required>
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" class="form-control" required>
+                    `;
                 }
             });
         });
@@ -140,14 +116,93 @@
         document.getElementById("paymentForm").addEventListener("submit", function (event) {
             event.preventDefault();
             const amount = document.getElementById("planAmount").value;
-            document.getElementById("invoiceDetails").innerHTML = `
-                <p><strong>Amount Paid:</strong> ${amount}</p>
-                <p><strong>Transaction ID:</strong> TXN${Math.floor(Math.random() * 1000000)}</p>
-            `;
-            new bootstrap.Modal(document.getElementById("invoiceModal")).show();
+            const method = document.querySelector("input[name='paymentMethod']:checked").value;
+            let valid = true;
+            let details = "";
+
+            if (method === "upi") {
+                const upiId = document.getElementById("upiId").value;
+                const upiPattern = /^[a-zA-Z0-9]+@[a-zA-Z]+$/;
+                if (!upiPattern.test(upiId)) {
+                    document.getElementById("upiError").textContent = "Invalid UPI ID format";
+                    valid = false;
+                } else {
+                    details = `<p><strong>UPI ID:</strong> ${upiId}</p>`;
+                }
+            } else if (method === "credit_card") {
+                const cardNumber = document.getElementById("cardNumber").value;
+                details = `<p><strong>Card:</strong> **** **** **** ${cardNumber.slice(-4)}</p>`;
+            }
+            
+            if (valid) {
+                const transactionId = `TXN${Math.floor(Math.random() * 1000000)}`;
+                Swal.fire({
+                    title: "Payment Successful!",
+                    text: `Your payment of ${amount} was successful.`,
+                    icon: "success",
+                    confirmButtonColor: "#54388b"
+                }).then(() => {
+                    document.getElementById("invoiceDetails").innerHTML = `
+                        <p><strong>Amount Paid:</strong> ${amount}</p>
+                        <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                        <p><strong>Payment Method:</strong> ${method.replace("_", " ").toUpperCase()}</p>
+                        ${details}
+                    `;
+                    new bootstrap.Modal(document.getElementById("invoiceModal")).show();
+                });
+            }
         });
+
+        
+        function downloadInvoice() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        Swal.fire("Error", "jsPDF is not loaded!", "error");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf; 
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Payment Invoice", 20, 20);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+
+    // Get invoice details
+    const invoiceElement = document.getElementById("invoiceDetails");
+    if (!invoiceElement || !invoiceElement.innerHTML.trim()) {
+        Swal.fire("Error", "Invoice details not found!", "error");
+        return;
+    }
+
+    // Extract and format invoice text
+    let invoiceText = invoiceElement.innerHTML.replace(/<br\s*\/?>/g, "\n"); 
+    invoiceText = invoiceText.replace(/<[^>]*>/g, "").trim(); 
+
+    // Split into lines and format text in the PDF
+    const lines = doc.splitTextToSize(invoiceText, 170);
+    let y = 40;
+    lines.forEach(line => {
+        doc.text(line, 20, y);
+        y += 10;
+    });
+
+    // Trigger PDF download
+    doc.save("invoice.pdf");
+}
+
+
+
+    function redirectToRecharge(){
+        window.location.href = "Recharge.html";
+
+    }
+
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 </html>

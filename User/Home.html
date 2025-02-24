@@ -9,14 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    <title>Recharge Page</title>
+    <title>Home</title>
     <style>
         body {
             background-color:#e2d8fa ;    
-            /* background: url('../img/Adobe\ Express\ -\ file.png') no-repeat center ;    */
                  
-            /* font-family: Arial, sans-serif; */
-            font-family: "Lato", serif;
+            font-family: Arial, sans-serif;
+            /* font-family: "Lato", serif; */
             
         }
         .lato-light {
@@ -143,6 +142,68 @@
             opacity: 0;
         }
 
+        .popular-plan {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .popular-plan:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .review-card {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .review-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .review-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid #6a11cb;
+        margin-bottom: 10px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .review-card:hover .review-img {
+        transform: rotate(5deg) scale(1.1);
+    }
+
+    .review-text {
+        font-style: italic;
+        color: #444;
+        font-size: 16px;
+    }
+
+    .review-author {
+        font-weight: bold;
+        color: #333;
+    }
+    .review-card::before {
+        content: "";
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: rgba(106, 17, 203, 0.2);
+        border-radius: 50%;
+        top: -10px;
+        right: -10px;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .review-card:hover::before {
+        transform: scale(1.5);
+    }
+
     </style>
     
 </head>
@@ -157,10 +218,28 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-sim"></i> Get SIM</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./userLogin.html"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Mobile.html"><i class="bi bi-phone"></i> Mobile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
+                    </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" href="#"><i class="bi bi-sim"></i> Get SIM</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> <span id="loggedInUser">Account</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="./Mobile.html"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="#" style="color: red;" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -169,93 +248,116 @@
     <section class="hero-section">
         <h1>Recharge Your Mobile <br> Instantly</h1>
         <p>Fast, Secure, and Reliable Recharge Service</p>
-        <a href="./userLogin.html" class="btn btn-primary btn-lg">Login</a>
+        <a href="./Recharge.html" class="btn btn-primary btn-lg">Recharge Now</a>
     </section>
 
 
     <!-- Recharge Section -->
-    <section class="container-recharge recharge-section text-center">
+    <!-- <section class="container-recharge recharge-section text-center">
         <h2>Recharge Your Mobile</h2>
         <input type="text" class="form-control mb-2" placeholder="Enter Mobile Number">
         <button class="btn btn-primary">Recharge Now</button>
+    </section> -->
+
+
+    <section class="container text-center my-5 position-relative" style="background: linear-gradient(135deg, #54388b, #9182ae); padding: 50px; border-radius: 15px; overflow: hidden;">
+        <h2 class="mb-4 text-white animate__animated animate__fadeInDown">Latest Offers & Discounts</h2>
+        <div id="offersCarousel" class="carousel slide animate__animated animate__fadeIn" data-bs-ride="carousel">
+            <div class="carousel-inner text-center">
+                <div class="carousel-item active">
+                    <div class="card p-4 shadow-lg rounded" style="max-width: 500px; margin: auto; background: #ffffff;">
+                        <h2 class="text-primary">₹50 Cashback</h2>
+                        <p>On recharges above ₹299</p>
+                        <button class="btn btn-success claim-offer">Claim Now</button>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card p-4 shadow-lg rounded" style="max-width: 500px; margin: auto; background: #ffffff;">
+                        <h2 class="text-primary">Extra 1GB Data</h2>
+                        <p>With every ₹199 recharge</p>
+                        <button class="btn btn-success claim-offer">Get Offer</button>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card p-4 shadow-lg rounded" style="max-width: 500px; margin: auto; background: #ffffff;">
+                        <h2 class="text-primary">10% Off</h2>
+                        <p>On first recharge via UPI</p>
+                        <button class="btn btn-success claim-offer">Avail Now</button>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#offersCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#offersCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle p-2"></span>
+            </button>
+        </div>
+        
+        <canvas id="confetti-canvas" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none;"></canvas>
     </section>
+    
+    
 
     <!-- Popular Plans Section -->
-    <section class="container-wide popular-plans text-center my-4">
-        <h2>Most Popular Plans</h2>
-        <div class="row">
-            <div class="col-md-8 col-lg-4">
-                <div class="card p-3">
-                    <h2>₹299</h2>
-                    <br>
-                    <div class="pack-details">
-                        <p><b>Validity:</b> 30 Days</p>
-                        <p><b>Data:</b> 2GB/day</p>
-                    </div>
-                    <button class="btn btn-primary">Recharge</button>
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Popular Plans</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-lg p-4 rounded popular-plan animate__animated animate__fadeInUp">
+                    <h3 class="text-primary">₹299 Plan</h3>
+                    <p>Unlimited Calls + 2GB/day</p>
+                    <p>28 Days Validity</p>
+                    <button class="btn btn-primary" onclick="redirectToPlans()">Recharge Now</button>
                 </div>
             </div>
-            <div class="col-md-8 col-lg-4">
-                <div class="card p-3">
-                    <h2>₹299</h2>
-                    <br>
-                    <div class="pack-details">
-                        <p><b>Validity:</b> 30 Days</p>
-                        <p><b>Data:</b> 2GB/day</p>
-                    </div>
-                    <button class="btn btn-primary">Recharge</button>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-lg p-4 rounded popular-plan animate__animated animate__fadeInUp animate__delay-1s">
+                    <h3 class="text-primary">₹499 Plan</h3>
+                    <p>Unlimited Calls + 3GB/day</p>
+                    <p>56 Days Validity</p>
+                    <button class="btn btn-primary" onclick="redirectToPlans()">Recharge Now</button>
                 </div>
             </div>
-            <div class="col-md-8 col-lg-4">
-                <div class="card p-3">
-                    <h2>₹299</h2>
-                    <br>
-                    <div class="pack-details">
-                        <p><b>Validity:</b> 30 Days</p>
-                        <p><b>Data:</b> 2GB/day</p>
-                    </div>
-                    <button class="btn btn-primary">Recharge</button>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-lg p-4 rounded popular-plan animate__animated animate__fadeInUp animate__delay-2s">
+                    <h3 class="text-primary">₹799 Plan</h3>
+                    <p>Unlimited Calls + 3.5GB/day</p>
+                    <p>84 Days Validity</p>
+                    <button class="btn btn-primary" onclick="redirectToPlans()">Recharge Now</button>
                 </div>
             </div>
-            
         </div>
     </section>
 
     <!-- Customer Reviews Section -->
-    <section class="container-wide customer-reviews text-center my-4">
-        <h2>Customer Reviews</h2>
-        <!-- <img src="../img/vect2.jpg" alt="" style="height: 150px;width: 200px;"> -->
-        <div class="row">
-            <div class="col-md-6 col-lg-3">
-                <div class="card p-3 d-flex flex-column align-items-center">
-                    <img src="../img/review3.png" alt="profile pic" style="height: 150px;width: 150px;">
-                    <p>"Great service! Quick and reliable."</p>
-                    <h5>- John Doe</h5>
+    <section class="container my-5 text-center">
+        <h2 class="mb-4 animate__animated animate__fadeInDown">Customer Reviews</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="review-card animate__animated animate__zoomIn">
+                    <img src="../img/review3.png" alt="profile pic" class="review-img">
+                    <p class="review-text">"Great service! Quick and reliable."</p>
+                    <h5 class="review-author">- John Doe</h5>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card p-3 d-flex flex-column align-items-center">
-                    <img src="../img/review4.png" alt="profile pic" style="height: 150px;width: 150px;">
-                    <p>"Great service! Quick and reliable."</p>
-                    <h5>- John Doe</h5>
+            <div class="col-md-6 col-lg-4">
+                <div class="review-card animate__animated animate__zoomIn animate__delay-1s">
+                    <img src="../img/review4.png" alt="profile pic" class="review-img">
+                    <p class="review-text">"Absolutely seamless experience!"</p>
+                    <h5 class="review-author">- Alice Brown</h5>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card p-3 d-flex flex-column align-items-center">
-                    <img src="../img/review5.png" alt="profile pic" style="height: 150px;width: 150px;">
-                    <p>"Best recharge platform with amazing offers!"</p>
-                    <h5>- Jane Smith</h5>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card p-3 d-flex flex-column align-items-center">
-                    <img src="../img/review6.jpg" alt="profile pic" style="height: 150px;width: 150px;">
-                    <p>"Best recharge platform with amazing offers!"</p>
-                    <h5>- Jane Smith</h5>
+            <div class="col-md-6 col-lg-4">
+                <div class="review-card animate__animated animate__zoomIn animate__delay-3s">
+                    <img src="../img/review6.jpg" alt="profile pic" class="review-img">
+                    <p class="review-text">"Reliable and fast. Highly recommended!"</p>
+                    <h5 class="review-author">- Michael Lee</h5>
                 </div>
             </div>
         </div>
     </section>
+
 
     <section class="about-section">
         <div class="container">
@@ -326,5 +428,60 @@
     
         </div>
     </div>
+
+
+    <script>
+        document.querySelectorAll('.claim-offer').forEach(button => {
+            button.addEventListener('click', function() {
+                startConfetti();
+                setTimeout(stopConfetti, 3000);
+            });
+        });
+    
+        function startConfetti() {
+            const canvas = document.getElementById("confetti-canvas");
+            const confettiSettings = { target: canvas, max: 150, size: 1.2, animate: true, respawn: true };
+            const confetti = new ConfettiGenerator(confettiSettings);
+            confetti.render();
+        }
+        
+        function stopConfetti() {
+            const canvas = document.getElementById("confetti-canvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function logoutUser() {
+        localStorage.removeItem("phoneNo"); 
+        window.location.href = "userLogin.html"; 
+    }
+
+        function redirectToPlans(){
+            window.location.href = "Recharge.html"; 
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+        let phoneNo = localStorage.getItem("phoneNo");
+        let loggedInUser=localStorage.getItem("loggedInUser");
+        if (loggedInUser) {
+            document.getElementById("loggedInUser").textContent = JSON.parse(loggedInUser).name;
+            document.getElementById("username").textContent = JSON.parse(loggedInUser).name;
+        }else{
+
+        }
+
+        if (phoneNo) {
+            document.getElementById("phoneNo").textContent = phoneNo;
+        }
+    });
+
+     function logoutUser() {
+        localStorage.removeItem("phoneNo"); 
+        window.location.href = "userLogin.html"; 
+    }
+
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/confetti-js"></script>
 </body>
 </html>
