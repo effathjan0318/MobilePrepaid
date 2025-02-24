@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Recharge Plans</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../img/logo.png" alt="Logo" width="100">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Bootstrap Carousel -->
+    <div id="planCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="../img/banner1.jpg" class="d-block w-100" alt="Plan Banner 1">
+            </div>
+            <div class="carousel-item">
+                <img src="../img/banner2.jpg" class="d-block w-100" alt="Plan Banner 2">
+            </div>
+            <div class="carousel-item">
+                <img src="../img/banner3.jpg" class="d-block w-100" alt="Plan Banner 3">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#planCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#planCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="container mt-4">
+        <ul class="nav nav-tabs" id="planTabs">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#popular">Popular</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#data">Data</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#sms">SMS</a></li>
+        </ul>
+        <div class="tab-content mt-3">
+            <div id="popular" class="tab-pane fade show active">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">₹299 Plan</h5>
+                        <p class="card-text">Validity: 28 days | Data: 2GB/day | Calls: Unlimited</p>
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited">View Details</a>
+                        <a href="#" class="btn btn-primary">Recharge</a>
+                    </div>
+                </div>
+            </div>
+            <div id="data" class="tab-pane fade">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">₹199 Data Pack</h5>
+                        <p class="card-text">Validity: 30 days | Data: 3GB/day</p>
+                        <a href="#" class="btn btn-link view-details" data-plan="₹199 Data Pack" data-validity="30 days" data-data="3GB/day" data-calls="N/A">View Details</a>
+                        <a href="#" class="btn btn-primary">Recharge</a>
+                    </div>
+                </div>
+            </div>
+            <div id="sms" class="tab-pane fade">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">₹50 SMS Pack</h5>
+                        <p class="card-text">Validity: 28 days | 100 SMS/day</p>
+                        <a href="#" class="btn btn-link view-details" data-plan="₹50 SMS Pack" data-validity="28 days" data-data="N/A" data-calls="100 SMS/day">View Details</a>
+                        <a href="#" class="btn btn-primary">Recharge</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Plan Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <p>More details about the selected plan will be shown here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".view-details").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    let planName = this.getAttribute("data-plan");
+                    let validity = this.getAttribute("data-validity");
+                    let data = this.getAttribute("data-data");
+                    let calls = this.getAttribute("data-calls");
+                    
+                    document.getElementById("modalBody").innerHTML = `<p><strong>Plan:</strong> ${planName}</p>
+                        <p><strong>Validity:</strong> ${validity}</p>
+                        <p><strong>Data:</strong> ${data}</p>
+                        <p><strong>Calls:</strong> ${calls}</p>`;
+
+                    new bootstrap.Modal(document.getElementById("detailsModal")).show();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

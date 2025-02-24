@@ -23,6 +23,27 @@
         .navbar-nav .nav-link:hover {
             color: #000000;
         }
+        .hero-section {
+            background: url('../img/h3.png') no-repeat center center/cover;
+            color: white;
+            text-align: left;
+            /* padding-left: 40px; */
+            padding: 100px 50px;
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .hero-section .btn {
+            background-color: #54388b;
+            border-color: #54388b;
+            /* border: none; */
+        }
+        .hero-section .btn:hover {
+            /* background-color: #6e4eaf; */
+            border-color: #feffff;
+            box-shadow: 0px 0px 5px #feffff;
+        }
 
         .footer {
             background-color: #54388b;
@@ -160,6 +181,13 @@
         </div>
     </nav>
 
+    <section class="hero-section">
+        <h1>One-time recharge for <br> 1 full year</h1>
+        <p>Recharge with a ₹3499 for a year full of digital delights</p>
+        <a href="./userLogin.html" class="btn btn-primary btn-lg">Get the best Annual Plan</a>
+    </section>
+
+
     <!-- Popular Plans Section -->
     <section class="container-wide popular-plans text-center my-4">
         <h2>Most Popular Plans</h2>
@@ -240,6 +268,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#topup">Top-up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#annual">Annual Plans</a>
                 </li>
             </ul>
             <div class="tab-content mt-3">
@@ -331,6 +362,19 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="topup">
+                    <div class="plan">
+                        <h2>₹299</h2><hr>
+                        <br>
+                        <div class="pack-details d-flex flex-row gap-5">
+                            <p><b>Validity:</b> 30 Days</p>
+                            <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
+                        </div>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#"><b>View Details</b></a>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="annual">
                     <div class="plan">
                         <h2>₹299</h2><hr>
                         <br>

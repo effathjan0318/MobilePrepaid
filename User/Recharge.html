@@ -23,6 +23,28 @@
         .navbar-nav .nav-link:hover {
             color: #000000;
         }
+        .hero-section {
+            background: url('../img/h3.png') no-repeat center center/cover;
+            
+            color: white;
+            text-align: left;
+            /* padding-left: 40px; */
+            padding: 100px 50px;
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .hero-section .btn {
+            background-color: #54388b;
+            border-color: #54388b;
+            /* border: none; */
+        }
+        .hero-section .btn:hover {
+            /* background-color: #6e4eaf; */
+            border-color: #feffff;
+            box-shadow: 0px 0px 5px #feffff;
+        }
 
         .footer {
             background-color: #54388b;
@@ -100,6 +122,29 @@
         .nav .nav-item a{
             color: #352457;
         }
+        .plan a{
+            text-decoration: none;
+            color:#352457 ;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .plan a:hover{
+            text-decoration: underline;
+        }
+        .row button{
+            background-color: #54388b;
+            border: none;
+        }
+        .row button:hover{
+            background-color: #352457;
+        }
+        .modal .btn{
+            background-color: #54388b;
+            border: none;
+        }
+        .modal .btn:hover{
+            background-color: #352457;
+        }
         .recharge-section{
             background: white;
             padding: 20px;
@@ -107,6 +152,7 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
             width: 500px;
+            /* height: 500px; */
         }
         .recharge-section button{
             background:#54388b;
@@ -115,6 +161,30 @@
         .recharge-section button:hover{
             background:#352457;
         }
+        @keyframes fadeSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        }
+
+        .hero-section h1 {
+            animation: fadeSlideUp 1s ease-out forwards;
+        }
+
+        .hero-section p {
+            animation: fadeSlideUp 1s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .hero-section .btn {
+            animation: fadeSlideUp 1s ease-out 1s forwards;
+            opacity: 0;
+        }
 
         
 
@@ -122,7 +192,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="../img/logo.png" alt="Logo" width="150"> 
@@ -133,16 +203,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-house-door"></i> Home</a>
+                        <a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-phone"></i> Mobile</a>
+                        <a class="nav-link" href="./Mobile.html"><i class="bi bi-phone"></i> Mobile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-grid"></i> View Plans</a>
+                        <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-lightning-fill"></i> Recharge</a>
+                    <li class="nav-item"></li>
+                        <a class="nav-link" href="#"><i class="bi bi-sim"></i> Get SIM</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -158,18 +228,71 @@
             </div>
         </div>
     </nav>
-    <section class="container-recharge recharge-section text-center">
-        <h2>Recharge Your Mobile</h2>
-        <input type="text" class="form-control mb-2" placeholder="Enter Mobile Number">
-        <button class="btn btn-primary">Recharge Now</button>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1>One-time recharge for <br> 1 full year</h1>
+        <p>Recharge with a ₹3499 for a year full of digital delights</p>
+        <a href="#" class="btn btn-primary btn-lg">Get the best Annual Plan</a>
     </section>
-    
+    <!--Recharge number-->
+    <section class="container-recharge recharge-section text-center">
+        <h2>Recharge Mobile</h2>
+        <input type="text" class="form-control mb-2" placeholder="Enter Mobile Number">
+        <a href="#LovedPlans">
+            <button class="btn btn-primary">Recharge Now</button>
+        </a>
+        
+    </section>
+
+
+    <!-- Most Loved Section -->
+    <section class="container-wide popular-plans text-center my-4">
+        <h2>Most Loved Plans</h2>
+        <div id="LovedPlans" class="row">
+            <div class="col-md-8 col-lg-4">
+                <div class="card p-3">
+                    <h2>₹299</h2>
+                    <br>
+                    <div class="pack-details">
+                        <p><b>Validity:</b> 30 Days</p>
+                        <p><b>Data:</b> 2GB/day</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
+                </div>
+            </div>
+            <div class="col-md-8 col-lg-4">
+                <div class="card p-3">
+                    <h2>₹299</h2>
+                    <br>
+                    <div class="pack-details">
+                        <p><b>Validity:</b> 30 Days</p>
+                        <p><b>Data:</b> 2GB/day</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
+                </div>
+            </div>
+            <div class="col-md-8 col-lg-4">
+                <div class="card p-3">
+                    <h2>₹299</h2>
+                    <br>
+                    <div class="pack-details">
+                        <p><b>Validity:</b> 30 Days</p>
+                        <p><b>Data:</b> 2GB/day</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <hr>
+    <!-- filter and Plans Section -->
     <div class="container my-5 row" >
         <div class="left col-md-3 mt-5">
             <h4>Filters</h4>
             <label for="priceRange" class="form-label">Price Range:</label>
             <input type="range" class="form-range" id="priceRange" min="10" max="1000" step="5" onchange="filterPlans()">
-            <span id="priceValue">₹10 - ₹1499</span><br>
+            <span id="priceValue">₹10 - ₹7499</span><br>
             
             <label for="networkType" class="form-label mt-3">Network Type:</label>
             <select class="form-select" id="networkType" onchange="filterPlans()">
@@ -184,12 +307,6 @@
                 <option value="yes">With Talktime</option>
                 <option value="no">Without Talktime</option>
             </select>
-            <!-- <div class="buttons row">
-                <button class="filter-btn" onclick="applyFilter('2gb-day')">2GB/Day</button>
-                <button class="filter-btn" onclick="applyFilter('30days')">30 Days</button>
-                <button class="filter-btn" onclick="applyFilter('30days')">30 Days</button>
-                <button class="filter-btn" onclick="applyFilter('30days')">30 Days</button>
-            </div> -->
         </div>
 
         <div class="right col-md-9">
@@ -210,96 +327,148 @@
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#topup">Top-up</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#annual">Annual Plans</a>
+                </li>
             </ul>
             <div class="tab-content mt-3">
                 <div class="tab-pane fade show active" id="all">
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
 
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
 
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="popular">
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="unlimited">
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="data">
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="topup">
                     <div class="plan">
-                        <h2>₹299</h2>
+                        <h2>₹299</h2><hr>
                         <br>
                         <div class="pack-details d-flex flex-row gap-5">
                             <p><b>Validity:</b> 30 Days</p>
                             <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
                         </div>
-                        <button class="btn btn-primary">Recharge</button>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="annual">
+                    <div class="plan">
+                        <h2>₹299</h2><hr>
+                        <br>
+                        <div class="pack-details d-flex flex-row gap-5">
+                            <p><b>Validity:</b> 30 Days</p>
+                            <p><b>Data:</b> 2GB/day</p>
+                            <p><b>Calls:</b> Unlimited</p>
+                        </div>
+                        <!-- <button class="btn btn-primary">Recharge</button> -->
+                        <a href="#" class="btn btn-link view-details" data-plan="₹299 Plan" data-validity="28 days" data-data="2GB/day" data-calls="Unlimited"><b>View Details</b></a>
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+
+    <!-- modal section -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Plan Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <p>More details about the selected plan will be shown here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="redirectToPayment()">Recharge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer section -->
     <div class="footer">
         <div class="container">
             <div class="row">
@@ -356,43 +525,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".view-details").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    let planName = this.getAttribute("data-plan");
+                    let validity = this.getAttribute("data-validity");
+                    let data = this.getAttribute("data-data");
+                    let calls = this.getAttribute("data-calls");
+                    
+                    document.getElementById("modalBody").innerHTML = `<p><strong>Plan:</strong> ${planName}</p>
+                        <p><strong>Validity:</strong> ${validity}</p>
+                        <p><strong>Data:</strong> ${data}</p>
+                        <p><strong>Calls:</strong> ${calls}</p>`;
 
-        // function filterPlans() {
-        //     let category = document.getElementById("filter").value;
-        //     let priceRange = document.getElementById("priceRange").value;
-        //     let networkType = document.getElementById("networkType").value;
-        //     let talktime = document.getElementById("talktime").value;
-        //     document.getElementById("priceValue").innerText = "$0 - $" + priceRange;
-            
-        //     let plans = document.querySelectorAll("#plansContainer .plan");
-            
-        //     plans.forEach(plan => {
-        //         let planPrice = parseInt(plan.getAttribute("data-price")) || 0;
-        //         let planNetwork = plan.getAttribute("data-network") || "all";
-        //         let planTalktime = plan.getAttribute("data-talktime") || "no";
-                
-        //         if ((category === "all" || plan.getAttribute("data-category") === category) && 
-        //             planPrice <= priceRange &&
-        //             (networkType === "all" || planNetwork === networkType) &&
-        //             (talktime === "all" || planTalktime === talktime)) {
-        //             plan.style.display = "block";
-        //         } else {
-        //             plan.style.display = "none";
-        //         }
-        //     });
-        // }
+                    new bootstrap.Modal(document.getElementById("detailsModal")).show();
+                });
+            });
+        });
 
-        // function applyFilter(filterType) {
-        //     let plans = document.querySelectorAll("#plansContainer .plan");
-            
-        //     plans.forEach(plan => {
-        //         if (plan.getAttribute("data-" + filterType)) {
-        //             plan.style.display = "block";
-        //         } else {
-        //             plan.style.display = "none";
-        //         }
-        //     });
-        // }
+        function redirectToPayment(){
+            window.location.href = "payment.html"; 
+        }
+        // document.getElementsByClassName("btn").addEventListener("click", function () {
+        // window.location.href = "payment.html"; 
+        // });
     </script>
 </body>
 </html>

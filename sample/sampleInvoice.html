@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge Payment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .payment-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        .btn-primary {
+            background-color: #54388b;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #432e6d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center">
+        <div class="payment-container">
+            <h4 class="text-center mb-4">Select Payment Method</h4>
+            <div class="row">
+                <img class="col-6" src="../img/pay1.avif" alt="secure payment">
+                <form id="paymentForm" class="col-6 overflow-auto" style="height: 400px;">
+                    <div class="mb-3">
+                        <label for="planAmount" class="form-label"><b>Amount</b></label>
+                        <input type="text" id="planAmount" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><b>Payment Method</b></label>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="upi" required> UPI
+                            </label>
+                            <div id="upi"></div>
+
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="credit_card"> Credit Card
+                            </label>
+                            <div id="cc"></div>
+
+                            <label class="payment-option">
+                                <input type="radio" name="paymentMethod" value="net_banking"> Net Banking
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Proceed to Pay</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background-color: #54388b;">
+                    <h5 class="modal-title" id="invoiceModalLabel">Payment Invoice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="invoiceDetails">
+                    <p>Payment details will be displayed here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="window.print()">Download Invoice</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const planAmount = params.get("amount") || "₹299";
+            document.getElementById("planAmount").value = planAmount;
+        });
+
+        document.querySelectorAll("input[name='paymentMethod']").forEach((radio) => {
+            radio.addEventListener("change", function () {
+                const paymentMethod = this.value;
+                const upi = document.getElementById("upi");
+                const cc = document.getElementById("cc");
+                upi.innerHTML = "";
+                cc.innerHTML = "";
+
+                if (paymentMethod === "upi") {
+                    upi.innerHTML = '<label class="form-label">Select UPI App</label>' +
+                        '<select id="upiApp" class="form-select" required>' +
+                        '<option value="phonepe">PhonePe</option>' +
+                        '<option value="googlepay">Google Pay</option>' +
+                        '</select>' +
+                        '<label for="upiId" class="form-label mt-2">UPI ID</label>' +
+                        '<input type="text" id="upiId" class="form-control" required>';
+                } else if (paymentMethod === "credit_card") {
+                    cc.innerHTML = '<label for="cardNumber" class="form-label">Card Number</label>' +
+                        '<input type="text" id="cardNumber" class="form-control" required>' +
+                        '<label for="expiryDate" class="form-label">Expiry Date</label>' +
+                        '<input type="text" id="expiryDate" class="form-control" required>' +
+                        '<label for="cvv" class="form-label">CVV</label>' +
+                        '<input type="text" id="cvv" class="form-control" required>';
+                }
+            });
+        });
+
+        document.getElementById("paymentForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const amount = document.getElementById("planAmount").value;
+            const transactionId = `TXN${Math.floor(Math.random() * 1000000)}`;
+
+            // Show success alert with delay
+            setTimeout(() => {
+                Swal.fire({
+                    title: "Payment Successful!",
+                    text: `Your payment of ${amount} was successful.`,
+                    icon: "success",
+                    confirmButtonColor: "#54388b"
+                }).then(() => {
+                    // After user clicks OK, show invoice modal
+                    document.getElementById("invoiceDetails").innerHTML = `
+                        <p><strong>Amount Paid:</strong> ${amount}</p>
+                        <p><strong>Transaction ID:</strong> ${transactionId}</p>
+                    `;
+                    new bootstrap.Modal(document.getElementById("invoiceModal")).show();
+                });
+            }, 2000);
+        });
+
+        // Redirect to previous page on modal close
+    document.getElementById("closeInvoice").addEventListener("click", function () {
+        const previousPage = document.referrer || "index.html"; // Default page if no referrer
+        window.location.href = previousPage;
+    });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
