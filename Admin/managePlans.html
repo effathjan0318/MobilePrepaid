@@ -16,14 +16,11 @@
         .sidebar {
             width: 250px;
             height: 100vh;
-            background: #222;
+            background: #2A3335;
             color: #fff;
             padding: 20px;
             position: fixed;
-            transition: transform 0.3s ease-in-out;
-        }
-        .sidebar.hidden {
-            transform: translateX(-100%);
+            overflow-y: auto;
         }
         .sidebar .nav-link {
             display: flex;
@@ -45,7 +42,7 @@
         .main-content.full-width {
             margin-left: 20px;
         }
-        .toggle-btn {
+        /* .toggle-btn {
             position: fixed;
             top: 20px;
             left: 260px;
@@ -59,19 +56,56 @@
         }
         .toggle-btn.hidden {
             left: 20px;
+        } */
+        .nav-tabs {
+            border-bottom: 2px solid #007bff;
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
         }
+
+        .nav-tabs .nav-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-tabs .nav-link {
+            font-weight: bold;
+            color: #495057;
+            padding: 12px;
+            transition: all 0.3s ease-in-out;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background: #e9ecef;
+            color: #007bff;
+        }
+
+        /* Active Tab Styling */
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            color: white;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+
+
         
     </style>
     <script>
 
-        function toggleSidebar() {
-            const sidebar = document.querySelector(".sidebar");
-            const mainContent = document.querySelector(".main-content");
-            const toggleBtn = document.querySelector(".toggle-btn");
-            sidebar.classList.toggle("hidden");
-            mainContent.classList.toggle("full-width");
-            toggleBtn.classList.toggle("hidden");
-        }
+        // function toggleSidebar() {
+        //     const sidebar = document.querySelector(".sidebar");
+        //     const mainContent = document.querySelector(".main-content");
+        //     const toggleBtn = document.querySelector(".toggle-btn");
+        //     sidebar.classList.toggle("hidden");
+        //     mainContent.classList.toggle("full-width");
+        //     toggleBtn.classList.toggle("hidden");
+        // }
 
         let plans = [];
         let editingIndex = -1;
@@ -141,6 +175,9 @@
             
             editingIndex = -1;
             renderPlans();
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('planModal'));
+            modal.hide();
         }
 
         function deletePlan(index) {
@@ -158,32 +195,130 @@
             document.getElementById("modalNetwork").value = plan.network;
             document.getElementById("modalTalktime").value = plan.talktime;
             document.getElementById("modalCategory").value = plan.category;
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('planModal'));
+            modal.hide();
         }
 
         document.addEventListener("DOMContentLoaded", loadPlans);
+
+        function resetModal() {
+            editingIndex = -1; // Ensure new plan mode
+            document.getElementById("modalPrice").value = "";
+            document.getElementById("modalValidity").value = "";
+            document.getElementById("modalData").value = "";
+            document.getElementById("modalCalls").value = "";
+            document.getElementById("modalNetwork").value = "";
+            document.getElementById("modalTalktime").value = "";
+            document.getElementById("modalCategory").value = "";
+        }
+
+        function filterByCategory(category) {
+            let filteredPlans;
+            
+            if (category === 'all') {
+                filteredPlans = plans;
+            } else {
+                filteredPlans = plans.filter(plan => plan.category.toLowerCase() === category.toLowerCase());
+            }
+            
+            renderPlans(filteredPlans);
+            
+            // Update active tab
+            document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function filterByCategory(category, event) {
+            let filteredPlans;
+
+            if (category === 'all') {
+                filteredPlans = plans;
+            } else {
+                filteredPlans = plans.filter(plan => plan.category.toLowerCase() === category.toLowerCase());
+            }
+
+            renderPlans(filteredPlans);
+
+            // Remove 'active' class from all tabs
+            document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+
+            // Add 'active' class to the clicked tab
+            event.target.classList.add('active');
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+   
+        const username = localStorage.getItem("loggedInUser");
+        if (username) {
+            document.getElementById("adminName").innerHTML = `<i class="bi bi-person-square"></i> ${username}`;
+        }
+        });
+
     </script>
 </head>
 <body>
-    <button class="toggle-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+    <!-- Sidebar -->
     <div class="sidebar">
-        <h4>Admin Name <i class="bi bi-chevron-down"></i></h4>
+        <a href="./profileSettings.html" style="text-decoration: none; color: white;">
+            <h4 id="adminName"><i class="bi bi-person-square"></i> Admin Name</h4>
+        </a>
+        <hr>
         <nav class="nav flex-column">
-            <a href="#" class="nav-link"><i class="bi bi-house-door"></i> Dashboard</a>
-            <a href="#" class="nav-link"><i class="bi bi-people"></i> Manage Users</a>
-            <a href="#" class="nav-link"><i class="bi bi-file-earmark"></i> Manage Plans</a>
-            <a href="#" class="nav-link"><i class="bi bi-bar-chart-line"></i> Revenue Analytics</a>
-            <a href="#" class="nav-link"><i class="bi bi-headset"></i> Customer Support</a>
+            <a href="./dashboard.html" class="nav-link"><i class="bi bi-house-door"></i> Dashboard</a>
+            <a href="./manageUsers.html" class="nav-link"><i class="bi bi-people"></i> Manage Users</a>
+            <a href="./managePlans.html" class="nav-link"><i class="bi bi-file-earmark"></i> Manage Plans</a>
+            <a href="./Revenue.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> Revenue Analytics</a>
+            <a href="./adminCustSupport.html" class="nav-link"><i class="bi bi-headset"></i> Customer Support</a>
             <hr>
-            <a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Reports</a>
-            <a href="#" class="nav-link"><i class="bi bi-gear"></i> Settings</a>
+            <a href="./Reports.html" class="nav-link"><i class="bi bi-file-earmark-text"></i> Reports</a>
+            <a href="./profileSettings.html" class="nav-link"><i class="bi bi-gear"></i> Settings</a>
         </nav>
     </div>
+
     <div class="main-content">
         <h1 class="mb-4 d-flex justify-content-center">Manage Plans</h1>
         <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search Plans..." onkeyup="filterPlans()">
 
+        <ul class="nav nav-tabs custom-tabs" id="planTabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" onclick="filterByCategory('all', event)">
+                    <i class="bi bi-list"></i> All
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="filterByCategory('Popular', event)">
+                    <i class="bi bi-star-fill"></i> Popular
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="filterByCategory('Unlimited', event)">
+                    <i class="bi bi-infinity"></i> Unlimited
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="filterByCategory('Data', event)">
+                    <i class="bi bi-wifi"></i> Data Add-On
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="filterByCategory('TopUp', event)">
+                    <i class="bi bi-cash-stack"></i> Top-Up
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="filterByCategory('Annual', event)">
+                    <i class="bi bi-calendar-check"></i> Annual
+                </a>
+            </li>
+        </ul>
+        
+        
+        
         <div class="btn">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planModal" onclick="editingIndex=-1">Add Plan</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planModal" onclick="resetModal()">Add Plan</button>
+
 
         </div>
         <table class="table table-bordered">
@@ -202,8 +337,6 @@
             </thead>
             <tbody id="plansTable"></tbody>
         </table>
-        
-        <!-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planModal" onclick="editingIndex=-1">Add Plan</button> -->
         
         <div class="modal fade" id="planModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">

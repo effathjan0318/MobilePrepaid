@@ -9,7 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        body { background-color: #f8f9fa; }
+        body {
+             background-color: #e2d8fa; 
+            }
         .payment-container {
             background: #ffffff;
             padding: 30px;
@@ -77,12 +79,11 @@
     </div>
 
     <script>
-        // const { jsPDF } = window.jspdf;
+        
         const params = new URLSearchParams(window.location.search);
         document.getElementById("planAmount").value = params.get("amount") || "₹299";
 
-        // const params = new URLSearchParams(window.location.search);
-        // document.getElementById("planAmount").value = params.get("amount") || "₹299";
+        
 
         document.querySelectorAll("input[name='paymentMethod']").forEach(radio => {
             radio.addEventListener("change", function () {
@@ -155,10 +156,10 @@
 
         
         function downloadInvoice() {
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-        Swal.fire("Error", "jsPDF is not loaded!", "error");
-        return;
-    }
+            if (!window.jspdf || !window.jspdf.jsPDF) {
+            Swal.fire("Error", "jsPDF is not loaded!", "error");
+            return;
+        }
 
     const { jsPDF } = window.jspdf; 
     const doc = new jsPDF();

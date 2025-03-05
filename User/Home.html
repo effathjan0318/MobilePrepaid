@@ -39,12 +39,28 @@
         .container-recharge {
             max-width: 500px;
         }
-        .recharge-section, .popular-plans, .customer-reviews {
+        .popular-plans, .customer-reviews {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
+        }
+        .recharge-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 500px;  /* Limits max width but keeps it responsive */
+            width: 100%; /* Ensures it adapts to smaller screens */
+        }
+        .recharge-section button {
+            background: #54388b;
+            border: none;
+        }
+        .recharge-section button:hover {
+            background: #352457;
         }
         .pack-details{
             display: flex;
@@ -222,7 +238,7 @@
                         <a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./Mobile.html"><i class="bi bi-phone"></i> Mobile</a>
+                        <a class="nav-link" href="./Mobile.html"><i class="bi bi-phone"></i> Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
@@ -236,7 +252,7 @@
                             <i class="bi bi-person-circle"></i> <span id="loggedInUser">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="./Mobile.html"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
                             <li><a class="dropdown-item" href="#" style="color: red;" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                         </ul>
                     </li>
@@ -251,13 +267,6 @@
         <a href="./Recharge.html" class="btn btn-primary btn-lg">Recharge Now</a>
     </section>
 
-
-    <!-- Recharge Section -->
-    <!-- <section class="container-recharge recharge-section text-center">
-        <h2>Recharge Your Mobile</h2>
-        <input type="text" class="form-control mb-2" placeholder="Enter Mobile Number">
-        <button class="btn btn-primary">Recharge Now</button>
-    </section> -->
 
 
     <section class="container text-center my-5 position-relative" style="background: linear-gradient(135deg, #54388b, #9182ae); padding: 50px; border-radius: 15px; overflow: hidden;">
@@ -297,6 +306,15 @@
         <canvas id="confetti-canvas" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none;"></canvas>
     </section>
     
+    <!-- Recharge Section -->
+    <!-- <section class="container text-center my-4">
+        <div class="recharge-section mx-auto p-3 p-md-4">
+            <h2>Recharge Mobile</h2>
+            <input type="text" id="phoneNo" class="form-control mb-2" placeholder="Enter Mobile Number">
+            <p id="errorMessage" class="text-danger mt-2"></p>
+            <button class="btn btn-primary w-100" onclick="validateAndCheckUser()">Recharge Now</button>
+        </div>
+    </section> -->
     
 
     <!-- Popular Plans Section -->
@@ -308,7 +326,7 @@
                     <h3 class="text-primary">₹299 Plan</h3>
                     <p>Unlimited Calls + 2GB/day</p>
                     <p>28 Days Validity</p>
-                    <button class="btn btn-primary" onclick="redirectToPlans()">Recharge Now</button>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge Now</button>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -316,7 +334,7 @@
                     <h3 class="text-primary">₹499 Plan</h3>
                     <p>Unlimited Calls + 3GB/day</p>
                     <p>56 Days Validity</p>
-                    <button class="btn btn-primary" onclick="redirectToPlans()">Recharge Now</button>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge Now</button>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -324,11 +342,12 @@
                     <h3 class="text-primary">₹799 Plan</h3>
                     <p>Unlimited Calls + 3.5GB/day</p>
                     <p>84 Days Validity</p>
-                    <button class="btn btn-primary" onclick="redirectToPlans()">Recharge Now</button>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge Now</button>
                 </div>
             </div>
         </div>
     </section>
+    
 
     <!-- Customer Reviews Section -->
     <section class="container my-5 text-center">
@@ -338,7 +357,7 @@
                 <div class="review-card animate__animated animate__zoomIn">
                     <img src="../img/review3.png" alt="profile pic" class="review-img">
                     <p class="review-text">"Great service! Quick and reliable."</p>
-                    <h5 class="review-author">- John Doe</h5>
+                    <h5 class="review-author">- Luna</h5>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4">
@@ -390,9 +409,9 @@
                     <h5>Our Offerings</h5>
                     <hr>
                     <ul class="list-unstyled">
-                        <li><a href="#">Prepaid</a></li>
-                        <li><a href="#">Get New SIM</a></li>
-                        <li><a href="#">Set AutoPay</a></li>
+                        <li><a href="./Recharge.html">Prepaid</a></li>
+                        <li><a href="./getSIM.html">Get New SIM</a></li>
+                        <li><a href="./Mobile.html">Set AutoPay</a></li>
                     </ul>
                 </div>
     
@@ -401,10 +420,10 @@
                     <h5>Support</h5>
                     <hr>
                     <ul class="list-unstyled">
-                        <li><a href="#">My Account</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Lost SIM</a></li>
-                        <li><a href="#">Feedback</a></li>
+                        <li><a href="./Mobile.html">My Account</a></li>
+                        <li><a href="./FAQ.html">FAQ</a></li>
+                        <li><a href="./customerSupport.html">Lost SIM</a></li>
+                        <li><a href="./customerSupport.html">Feedback</a></li>
                     </ul>
                 </div>
     
@@ -431,12 +450,12 @@
 
 
     <script>
-        document.querySelectorAll('.claim-offer').forEach(button => {
-            button.addEventListener('click', function() {
-                startConfetti();
-                setTimeout(stopConfetti, 3000);
-            });
-        });
+        // document.querySelectorAll('.claim-offer').forEach(button => {
+        //     button.addEventListener('click', function() {
+        //         startConfetti();
+        //         setTimeout(stopConfetti, 3000);
+        //     });
+        // });
     
         function startConfetti() {
             const canvas = document.getElementById("confetti-canvas");
@@ -451,16 +470,12 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        function logoutUser() {
-        localStorage.removeItem("phoneNo"); 
-        window.location.href = "userLogin.html"; 
-    }
-
-        function redirectToPlans(){
-            window.location.href = "Recharge.html"; 
+        function redirectToPayment(){
+            window.location.href = "Payment.html"; 
         }
 
         document.addEventListener("DOMContentLoaded", function() {
+            startConfetti();
         let phoneNo = localStorage.getItem("phoneNo");
         let loggedInUser=localStorage.getItem("loggedInUser");
         if (loggedInUser) {
@@ -477,8 +492,37 @@
 
      function logoutUser() {
         localStorage.removeItem("phoneNo"); 
+        // localStorage.removeItem("loggedInUser").name;
         window.location.href = "userLogin.html"; 
     }
+
+    // async function validateAndCheckUser() {
+    //     let phoneInput = document.getElementById("phoneNo");
+    //     let phone = phoneInput.value.trim();
+    //     let errorMessage = document.getElementById("errorMessage");
+
+    //     let phoneRegex = /^[6-9]\d{9}$/;
+    //     if (!phoneRegex.test(phone)) {
+    //         errorMessage.textContent = "Invalid phone number! Enter a valid 10-digit number.";
+    //         return;
+    //     }
+
+    //     try {
+    //         let response = await fetch("user.json");
+    //         let users = await response.json();
+    //         console.log(users);
+    //         let userExists = users.some(user => user.number === phone);
+    //         if (userExists) {
+    //             errorMessage.textContent = ""; 
+    //             window.location.href = "Recharge.html"; 
+    //         } else {
+    //             errorMessage.textContent = "Phone number not registered!";
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching user data:", error);
+    //         errorMessage.textContent = "Error fetching user data. Try again later.";
+    //     }
+    // }
 
     </script>
     

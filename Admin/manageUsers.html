@@ -10,19 +10,17 @@
 
     <style>
         body {
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
         }
+        
         .sidebar {
             width: 250px;
             height: 100vh;
-            background: #222;
+            background: #2A3335;
             color: #fff;
             padding: 20px;
             position: fixed;
-            transition: transform 0.3s ease-in-out;
-        }
-        .sidebar.hidden {
-            transform: translateX(-100%);
+            overflow-y: auto;
         }
         .sidebar .nav-link {
             display: flex;
@@ -37,46 +35,95 @@
             background: #444;
             border-radius: 5px;
         }
+
+        /* Main Content */
         .main-content {
             margin-left: 270px;
             padding: 20px;
-            transition: margin-left 0.3s ease-in-out;
-        }
-        .main-content.full-width {
-            margin-left: 20px;
-        }
-        .toggle-btn {
-            position: fixed;
-            top: 20px;
-            left: 260px;
-            background: #222;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: left 0.3s ease-in-out;
-            border-radius: 5px;
-        }
-        .toggle-btn.hidden {
-            left: 20px;
-        }
-    </style>
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector(".sidebar");
-            const mainContent = document.querySelector(".main-content");
-            const toggleBtn = document.querySelector(".toggle-btn");
-            sidebar.classList.toggle("hidden");
-            mainContent.classList.toggle("full-width");
-            toggleBtn.classList.toggle("hidden");
         }
 
+        /* Status Colors */
+        .status-active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: red;
+            font-weight: bold;
+            background-color: #f8d7da !important;
+        }
+
+        /* Enhanced Nav Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid #007bff;
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .nav-tabs .nav-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-tabs .nav-link {
+            font-weight: bold;
+            color: #495057;
+            padding: 12px;
+            transition: all 0.3s ease-in-out;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background: #e9ecef;
+            color: #007bff;
+        }
+
+        /* Active Tab Styling */
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            color: white;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+
+
+        /* Modal Styling */
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Checkbox Alignment */
+        table th:first-child, table td:first-child {
+            text-align: center;
+            width: 50px;
+        }
+
+        /* Button Styling */
+        .btn-danger, .btn-warning {
+            margin-right: 5px;
+        }
+
+        /* Disabled Delete Button */
+        #deleteSelectedBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    </style>
+
+    <script>
         let users = [];
         let editingIndex = -1;
 
         async function loadUsers() {
             try {
-                const response = await fetch('user.json');
+                const response = await fetch('users.json');
                 users = await response.json();
                 renderUsers();
             } catch (error) {
@@ -84,101 +131,230 @@
             }
         }
 
-        function renderUsers(filteredUsers = users) {
-            const tableBody = document.getElementById("usersTable");
-            tableBody.innerHTML = "";
-            filteredUsers.forEach((user, index) => {
-                tableBody.innerHTML += `<tr>
-                    <td>${user.name}</td>
-                    <td>${user.number}</td>
-                    <td>${user.email}</td>
-                    <td>${user.address}</td>
-                    <td>
-                        <button class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#userModal' onclick='editUser(${index})'>Edit</button>
-                        <button class='btn btn-danger' onclick='deleteUser(${index})'>Delete</button>
-                    </td>
-                </tr>`;
-            });
-        }
+        function renderUsers(filterType = 'all') {
+    const tableBody = document.getElementById("usersTable");
+    tableBody.innerHTML = "";
 
-        function filterUsers() {
-            const query = document.getElementById("searchInput").value.toLowerCase();
-            const filteredUsers = users.filter(user =>
-                user.name.toLowerCase().includes(query) ||
-                user.number.includes(query) ||
-                user.email.toLowerCase().includes(query) ||
-                user.address.toLowerCase().includes(query)
-            );
-            renderUsers(filteredUsers);
+    const today = new Date();
+    const threeDaysLater = new Date();
+    threeDaysLater.setDate(today.getDate() + 3);
+
+    let filteredUsers = users;
+
+    if (filterType === 'expiring') {
+        const today = new Date();
+
+    // Create an array of the next 3 days (1, 2, and 3 days from today)
+    const expiryDates = [];
+    for (let i = 1; i <= 3; i++) {
+        const date = new Date();
+        date.setDate(today.getDate() + i);
+        expiryDates.push(date.toISOString().split('T')[0]); // Convert to YYYY-MM-DD format
+    }
+
+    // Filter users whose expiry date matches any of the next 3 days
+    filteredUsers = users.filter(user => {
+        const expiryDate = new Date(user.expiry).toISOString().split('T')[0];
+        return expiryDates.includes(expiryDate);
+    });
+    } else if (filterType === 'active') {
+        filteredUsers = users.filter(user => user.status.toLowerCase() === "active");
+    } else if (filterType === 'inactive') {
+        filteredUsers = users.filter(user => user.status.toLowerCase() === "inactive");
+    }
+
+    filteredUsers.forEach((user, index) => {
+        tableBody.innerHTML += `
+            <tr>
+                <td><input type="checkbox" class="user-checkbox" onclick="updateDeleteButton()" data-index="${index}"></td>
+                <td>${user.name}</td>
+                <td>${user.mobile}</td>
+                <td>${user.email}</td>
+                <td>${user.address}</td>
+                <td>${user.plan}</td>
+                <td>${user.expiry}</td>
+                <td>${user.status}</td>
+                <td>
+                    <button class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#userModal' onclick='editUser(${index})'>Edit</button>
+                    
+                    ${filterType === 'expiring' ? `<button class='btn btn-info' onclick='notifyUser(${index})'>Notify</button>` : ""}
+                </td>
+            </tr>`;
+    });
+
+    updateDeleteButton();
+}
+
+function deleteUser(index) {
+    if (confirm(`Are you sure you want to delete ${users[index].name}?`)) {
+        users.splice(index, 1);
+        renderUsers();
+    }
+}
+
+function deleteSelectedUsers() {
+    const selectedCheckboxes = document.querySelectorAll(".user-checkbox:checked");
+
+    if (selectedCheckboxes.length === 0) {
+        alert("No users selected for deletion.");
+        return;
+    }
+
+    if (confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected users?`)) {
+        let indexesToDelete = Array.from(selectedCheckboxes).map(cb => parseInt(cb.dataset.index)).sort((a, b) => b - a);
+        
+        indexesToDelete.forEach(index => users.splice(index, 1));
+
+        renderUsers();
+    }
+}
+
+function toggleSelectAll() {
+    const checkboxes = document.querySelectorAll(".user-checkbox");
+    const selectAllCheckbox = document.getElementById("selectAll");
+    
+    checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);
+    
+    updateDeleteButton();
+}
+
+function updateDeleteButton() {
+    const selectedUsers = document.querySelectorAll(".user-checkbox:checked").length;
+    document.getElementById("deleteSelectedBtn").disabled = selectedUsers === 0;
+}
+
+        function notifyUser(index) {
+            alert(`Notification sent to ${users[index].name} (${users[index].mobile}) regarding plan expiry!`);
         }
 
         function saveUser() {
             const user = {
                 name: document.getElementById("modalName").value,
-                number: document.getElementById("modalNumber").value,
+                mobile: document.getElementById("modalMobile").value,
                 email: document.getElementById("modalEmail").value,
-                address: document.getElementById("modalAddress").value
+                address: document.getElementById("modalAddress").value,
+                plan: document.getElementById("modalPlan").value,
+                expiry: document.getElementById("modalExpiry").value,
+                status: document.getElementById("modalStatus").value
             };
-            
+
             if (editingIndex === -1) {
                 users.push(user);
             } else {
                 users[editingIndex] = user;
             }
-            
+
             editingIndex = -1;
             renderUsers();
-        }
 
-        function deleteUser(index) {
-            users.splice(index, 1);
-            renderUsers();
+            var modal = bootstrap.Modal.getInstance(document.getElementById("userModal"));
+            modal.hide();
         }
 
         function editUser(index) {
             editingIndex = index;
             const user = users[index];
             document.getElementById("modalName").value = user.name;
-            document.getElementById("modalNumber").value = user.number;
+            document.getElementById("modalMobile").value = user.mobile;
             document.getElementById("modalEmail").value = user.email;
             document.getElementById("modalAddress").value = user.address;
+            document.getElementById("modalPlan").value = user.plan;
+            document.getElementById("modalExpiry").value = user.expiry;
+            document.getElementById("modalStatus").value = user.status;
         }
 
         document.addEventListener("DOMContentLoaded", loadUsers);
+
+        function setActiveTab(selectedTab) {
+            document.querySelectorAll(".nav-tabs .nav-link").forEach(tab => tab.classList.remove("active"));
+            selectedTab.classList.add("active");
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+   
+        const username = localStorage.getItem("loggedInUser");
+        if (username) {
+            document.getElementById("adminName").innerHTML = `<i class="bi bi-person-square"></i> ${username}`;
+        }
+        });
+
+
     </script>
 </head>
 <body>
-    <button class="toggle-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+    <!-- Sidebar -->
     <div class="sidebar">
-        <h4>Admin Name <i class="bi bi-chevron-down"></i></h4>
+        <a href="./profileSettings.html" style="text-decoration: none; color: white;">
+            <h4 id="adminName"><i class="bi bi-person-square"></i> Admin Name</h4>
+        </a>
+        <hr>
         <nav class="nav flex-column">
-            <a href="#" class="nav-link"><i class="bi bi-house-door"></i> Dashboard</a>
-            <a href="#" class="nav-link"><i class="bi bi-people"></i> Manage Users</a>
-            <a href="#" class="nav-link"><i class="bi bi-file-earmark"></i> Manage Plans</a>
-            <a href="#" class="nav-link"><i class="bi bi-bar-chart-line"></i> Revenue Analytics</a>
-            <a href="#" class="nav-link"><i class="bi bi-headset"></i> Customer Support</a>
+            <a href="./dashboard.html" class="nav-link"><i class="bi bi-house-door"></i> Dashboard</a>
+            <a href="./manageUsers.html" class="nav-link"><i class="bi bi-people"></i> Manage Users</a>
+            <a href="./managePlans.html" class="nav-link"><i class="bi bi-file-earmark"></i> Manage Plans</a>
+            <a href="./Revenue.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> Revenue Analytics</a>
+            <a href="./adminCustSupport.html" class="nav-link"><i class="bi bi-headset"></i> Customer Support</a>
             <hr>
-            <a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Reports</a>
-            <a href="#" class="nav-link"><i class="bi bi-gear"></i> Settings</a>
+            <a href="./Reports.html" class="nav-link"><i class="bi bi-file-earmark-text"></i> Reports</a>
+            <a href="./profileSettings.html" class="nav-link"><i class="bi bi-gear"></i> Settings</a>
         </nav>
     </div>
 
     <div class="main-content">
         <h1 class="mb-4 d-flex justify-content-center">Manage Users</h1>
-        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search Users..." onkeyup="filterUsers()">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add User</button>
+        <!-- <input type="text" id="searchInput" class="form-control mt-3" placeholder="Search users..." onkeyup="renderUsers()"> -->
+        <ul class="nav nav-tabs mt-3">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" onclick="setActiveTab(this); renderUsers('all')">
+                    <i class="bi bi-list-ul"></i> All Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="setActiveTab(this); renderUsers('expiring')">
+                    <i class="bi bi-hourglass-split"></i> Expiring Soon
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="setActiveTab(this); renderUsers('active')">
+                    <i class="bi bi-check-circle"></i> Active Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="setActiveTab(this); renderUsers('inactive')">
+                    <i class="bi bi-x-circle"></i> Inactive Users
+                </a>
+            </li>
+        </ul>
+        
+        <div class="d-flex flex-row justify-content-between">
+
+            <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#userModal">Add User</button>
+            <button class="btn btn-danger mt-3" id="deleteSelectedBtn" onclick="deleteSelectedUsers()" disabled>
+                <i class="bi bi-trash"></i> Delete Selected
+            </button>
+        </div>
+        
+
         <table class="table table-bordered mt-3">
             <thead>
                 <tr>
+                    <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
                     <th>Name</th>
-                    <th>Number</th>
+                    <th>Mobile</th>
                     <th>Email</th>
                     <th>Address</th>
+                    <th>Plan</th>
+                    <th>Expiry Date</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="usersTable"></tbody>
         </table>
+    
+        
+
         <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -188,9 +364,15 @@
                     </div>
                     <div class="modal-body">
                         <input id="modalName" class="form-control mb-2" placeholder="Name">
-                        <input id="modalNumber" class="form-control mb-2" placeholder="Number">
+                        <input id="modalMobile" class="form-control mb-2" placeholder="Mobile">
                         <input id="modalEmail" class="form-control mb-2" placeholder="Email">
                         <input id="modalAddress" class="form-control mb-2" placeholder="Address">
+                        <input id="modalPlan" class="form-control mb-2" placeholder="Plan">
+                        <input id="modalExpiry" type="date" class="form-control mb-2">
+                        <select id="modalStatus" class="form-control mb-2">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

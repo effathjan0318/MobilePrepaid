@@ -198,7 +198,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="./Home.html">
                 <img src="../img/logo.png" alt="Logo" width="150"> 
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -210,7 +210,7 @@
                         <a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./Mobile.html"><i class="bi bi-phone"></i> Mobile</a>
+                        <a class="nav-link" href="./Mobile.html"><i class="bi bi-phone"></i> Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
@@ -237,7 +237,7 @@
     <section class="hero-section text-center text-lg-start">
         <h1>One-time recharge for <br> 1 full year</h1>
         <p>Recharge with a ₹3499 for a year full of digital delights</p>
-        <a href="#" class="btn btn-primary btn-lg">Get the best Annual Plan</a>
+        <a href="#annual" class="btn btn-primary btn-lg">Get the best Annual Plan</a>
     </section>
 
     <!--Recharge number-->
@@ -263,6 +263,17 @@
                     <br>
                     <div class="pack-details">
                         <p><b>Validity:</b> 30 Days</p>
+                        <p><b>Data:</b> 1.5GB/day</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card p-3">
+                    <h2>₹499</h2>
+                    <br>
+                    <div class="pack-details">
+                        <p><b>Validity:</b> 56 Days</p>
                         <p><b>Data:</b> 2GB/day</p>
                     </div>
                     <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
@@ -270,22 +281,11 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card p-3">
-                    <h2>₹299</h2>
+                    <h2>₹799</h2>
                     <br>
                     <div class="pack-details">
-                        <p><b>Validity:</b> 30 Days</p>
-                        <p><b>Data:</b> 2GB/day</p>
-                    </div>
-                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card p-3">
-                    <h2>₹299</h2>
-                    <br>
-                    <div class="pack-details">
-                        <p><b>Validity:</b> 30 Days</p>
-                        <p><b>Data:</b> 2GB/day</p>
+                        <p><b>Validity:</b> 84 Days</p>
+                        <p><b>Data:</b> 2.5GB/day</p>
                     </div>
                     <button class="btn btn-primary" onclick="redirectToPayment()">Recharge</button>
                 </div>
@@ -329,26 +329,6 @@
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#annual">Annual Plans</a></li>
             </ul>
             
-            <!-- <div class="tab-content mt-3">
-                <div class="tab-pane fade show active" id="all">
-                    <div id="planList"></div>
-                </div>
-                <div class="tab-pane fade" id="popular">
-                    <div id="popularPlans"></div>
-                </div>
-                <div class="tab-pane fade" id="unlimited">
-                    <div id="unlimitedPlans"></div>
-                </div>
-                <div class="tab-pane fade" id="data">
-                    <div id="dataPlans"></div>
-                </div>
-                <div class="tab-pane fade" id="topup">
-                    <div id="topupPlans"></div>
-                </div>
-                <div class="tab-pane fade" id="annual">
-                    <div id="annualPlans"></div>
-                </div>
-            </div> -->
 
             <div class="tab-content mt-3" id="plansContainer"></div>
 
@@ -371,9 +351,9 @@
                     <h5>Our Offerings</h5>
                     <hr>
                     <ul class="list-unstyled">
-                        <li><a href="#">Prepaid</a></li>
-                        <li><a href="#">Get New SIM</a></li>
-                        <li><a href="#">Set AutoPay</a></li>
+                        <li><a href="./Recharge.html">Prepaid</a></li>
+                        <li><a href="./getSIM.html">Get New SIM</a></li>
+                        <li><a href="./Mobile.html">Set AutoPay</a></li>
                     </ul>
                 </div>
     
@@ -382,10 +362,10 @@
                     <h5>Support</h5>
                     <hr>
                     <ul class="list-unstyled">
-                        <li><a href="#">My Account</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Lost SIM</a></li>
-                        <li><a href="#">Feedback</a></li>
+                        <li><a href="./Mobile.html">My Account</a></li>
+                        <li><a href="./FAQ.html">FAQ</a></li>
+                        <li><a href="./customerSupport.html">Lost SIM</a></li>
+                        <li><a href="./customerSupport.html">Feedback</a></li>
                     </ul>
                 </div>
     

@@ -1,0 +1,14 @@
+{
+    "admins": [
+      {
+        "username": "effathjan",
+        "password": "eff123",
+        "email":"effathjan@gmail.com"
+      },
+      {
+        "username": "admin2",
+        "password": "admin@2024"
+      }
+    ]
+  }
+  

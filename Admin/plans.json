@@ -5,8 +5,8 @@
         "validity": "30 Days",
         "data": "2GB/day",
         "calls": "Unlimited",
-        "network": "4g",
-        "talktime": "yes",
+        "network": "4G",
+        "talktime": "Yes",
         "category": "popular"
     },
     {
@@ -15,8 +15,8 @@
         "validity": "56 Days",
         "data": "1.5GB/day",
         "calls": "Unlimited",
-        "network": "5g",
-        "talktime": "no",
+        "network": "5G",
+        "talktime": "No",
         "category": "unlimited"
     },
     {
@@ -25,8 +25,8 @@
         "validity": "28 Days",
         "data": "1GB/day",
         "calls": "Unlimited",
-        "network": "4g",
-        "talktime": "yes",
+        "network": "4G",
+        "talktime": "Yes",
         "category": "topup"
     },
     {
@@ -35,8 +35,8 @@
         "validity": "365 Days",
         "data": "1.5GB/day",
         "calls": "Unlimited",
-        "network": "5g",
-        "talktime": "yes",
+        "network": "5G",
+        "talktime": "Yes",
         "category": "annual"
     },
     {
@@ -45,8 +45,8 @@
         "validity": "1 Day",
         "data": "3GB",
         "calls": "NA",
-        "network": "4g",
-        "talktime": "no",
+        "network": "4G",
+        "talktime": "No",
         "category": "data"
     },
     {
@@ -55,8 +55,8 @@
         "validity": "28 Days",
         "data": "3GB/day",
         "calls": "Unlimited",
-        "network": "5g",
-        "talktime": "no",
+        "network": "5G",
+        "talktime": "No",
         "category": "popular"
     },
     {
@@ -65,8 +65,208 @@
         "validity": "84 Days",
         "data": "2GB/day",
         "calls": "Unlimited",
-        "network": "4g",
-        "talktime": "yes",
+        "network": "4G",
+        "talktime": "Yes",
+        "category": "unlimited"
+    },
+    {
+        "id": 8,
+        "price": 129,
+        "validity": "10 Days",
+        "data": "1GB",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "No",
+        "category": "topup"
+    },
+    {
+        "id": 9,
+        "price": 1499,
+        "validity": "365 Days",
+        "data": "2GB/day",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "Yes",
+        "category": "annual"
+    },
+    {
+        "id": 10,
+        "price": 79,
+        "validity": "3 Days",
+        "data": "2GB",
+        "calls": "NA",
+        "network": "4G",
+        "talktime": "No",
+        "category": "data"
+    },
+    {
+        "id": 11,
+        "price": 249,
+        "validity": "30 Days",
+        "data": "2.5GB/day",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "Yes",
+        "category": "popular"
+    },
+    {
+        "id": 12,
+        "price": 549,
+        "validity": "56 Days",
+        "data": "2GB/day",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "No",
+        "category": "unlimited"
+    },
+    {
+        "id": 13,
+        "price": 159,
+        "validity": "21 Days",
+        "data": "1GB/day",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "Yes",
+        "category": "topup"
+    },
+    {
+        "id": 14,
+        "price": 1799,
+        "validity": "365 Days",
+        "data": "3GB/day",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "Yes",
+        "category": "annual"
+    },
+    {
+        "id": 15,
+        "price": 39,
+        "validity": "1 Day",
+        "data": "1GB",
+        "calls": "NA",
+        "network": "4G",
+        "talktime": "No",
+        "category": "data"
+    },
+    {
+        "id": 16,
+        "price": 319,
+        "validity": "28 Days",
+        "data": "2GB/day",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "No",
+        "category": "popular"
+    },
+    {
+        "id": 17,
+        "price": 799,
+        "validity": "90 Days",
+        "data": "2.5GB/day",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "Yes",
+        "category": "unlimited"
+    },
+    {
+        "id": 18,
+        "price": 189,
+        "validity": "20 Days",
+        "data": "1.5GB/day",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "Yes",
+        "category": "topup"
+    },
+    {
+        "id": 19,
+        "price": 2099,
+        "validity": "365 Days",
+        "data": "Unlimited",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "Yes",
+        "category": "annual"
+    },
+    {
+        "id": 20,
+        "price": 99,
+        "validity": "7 Days",
+        "data": "2GB",
+        "calls": "NA",
+        "network": "4G",
+        "talktime": "No",
+        "category": "data"
+    },
+    {
+        "id": 21,
+        "price": 279,
+        "validity": "30 Days",
+        "data": "3GB/day",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "Yes",
+        "category": "popular"
+    },
+    {
+        "id": 22,
+        "price": 579,
+        "validity": "70 Days",
+        "data": "2GB/day",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "No",
+        "category": "unlimited"
+    },
+    {
+        "id": 23,
+        "price": 219,
+        "validity": "28 Days",
+        "data": "1.5GB/day",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "Yes",
+        "category": "topup"
+    },
+    {
+        "id": 24,
+        "price": 2599,
+        "validity": "365 Days",
+        "data": "3GB/day",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "Yes",
+        "category": "annual"
+    },
+    {
+        "id": 25,
+        "price": 109,
+        "validity": "15 Days",
+        "data": "2GB",
+        "calls": "NA",
+        "network": "4G",
+        "talktime": "No",
+        "category": "data"
+    },
+    {
+        "id": 26,
+        "price": 349,
+        "validity": "35 Days",
+        "data": "2GB/day",
+        "calls": "Unlimited",
+        "network": "5G",
+        "talktime": "No",
+        "category": "topup"
+    },
+    {
+        "id": 27,
+        "price": 999,
+        "validity": "120 Days",
+        "data": "2.5GB/day",
+        "calls": "Unlimited",
+        "network": "4G",
+        "talktime": "Yes",
         "category": "unlimited"
     }
 ]
