@@ -135,6 +135,17 @@
             padding: 15px;
             font-weight: bold;
         }
+        .active-plan-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        #expiryBadge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+
         .feature-card .icon {
             font-size: 35px;
             font-weight: bolder;
@@ -162,13 +173,13 @@
                         <a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./Mobile.html"><i class="bi bi-phone"></i> Profile</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-sim"></i> Get SIM</a>
+                        <a class="nav-link" href="./getSIM.html"><i class="bi bi-sim"></i> Get SIM</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./customerSupport.html"><i class="bi bi-headset"></i> Support</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -176,7 +187,7 @@
                             <i class="bi bi-person-circle"></i> <span id="loggedInUser">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="./Mobile.html"><i class="bi bi-gear"></i> Profile</a></li>
                             <li><a class="dropdown-item" href="#" style="color: red;" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                         </ul>
                     </li>
@@ -187,7 +198,7 @@
 
     <div class="container">
         <div class="profile-container">
-            <div class="profile-section d-flex flex-column justify-content-">
+            <div class="profile-section d-flex flex-column col-6">
                 <div class="profile-info">
                     <i class="bi bi-person-circle profile-icon me-2 py-1.5"></i>
                     <span id="username"> Name</span>
@@ -198,12 +209,19 @@
                     <span id="phoneNo">98765 43210</span>
                 </div>
                 <div class="profile-info">
-                    <a href="#" class="settings-icon"><i class="bi bi-gear-fill"></i></a>
+                    <a href="./userProfileSettings.html" class="settings-icon"><i class="bi bi-gear-fill"></i></a>
+                </div>
+                
+            </div>
+            <div class="active-plan-container position-relative col-6">
+                <span id="expiryBadge" class="badge bg-warning text-dark position-absolute top-0 end-0 mt-2 me-2">
+                    Expires in X days
+                </span>
+                <div class="active-plan p-5" id="activePlan">
+                    <i class="bi bi-lightning-fill me-2"></i> Active Plan: Loading...
                 </div>
             </div>
-            <div class="active-plan">
-                <i class="bi bi-lightning-fill me-2"></i> Active Plan: Unlimited Calls + 2GB Data/Day
-            </div>
+            
         </div>
     </div>
     
@@ -222,7 +240,7 @@
                     </div>
                 </div>
             </a>
-            <a href="#" style="text-decoration: none;" class="view-recharge-history">
+            <a href="./recharge-History.html" style="text-decoration: none;" class="view-recharge-history">
                 <div class="col">
                     <div class="card text-center p-4 shadow-sm feature-card">
                         <i class="icon bi bi-clock mb-2 text-success"></i>
@@ -231,7 +249,7 @@
                     </div>
                 </div>
             </a>
-            <a href="#" style="text-decoration: none;" class="view-transaction-history">
+            <a href="./transaction-History.html" style="text-decoration: none;" class="view-transaction-history">
             <div class="col">
                 <div class="card text-center p-4 shadow-sm feature-card">
                     <i class="icon bi bi-clock-history mb-2 text-info"></i>
@@ -366,104 +384,6 @@
 </div>
 
 
-<!-- Recharge History Modal -->
-<div class="modal fade" id="rechargeHistoryModal" tabindex="-1" aria-labelledby="rechargeHistoryLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          
-            <div class="modal-header text-white" style="background-color: #54388b;">
-                <h5 class="modal-title" id="rechargeHistoryLabel">Recharge History</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body text-center" id="historyModalBody">
-              
-                <div id="historyLoading" class="my-3">
-                    <img src="../img/loader.gif" alt="Loading..." width="100">
-                    <p class="mt-2">Fetching recharge history...</p>
-                </div>
-
-               
-                <div id="historyContent" style="display: none;">
-                    <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            15th Feb 2025 - Rs. 299 Plan <span class="badge bg-success">Success</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            10th Jan 2025 - Rs. 499 Plan <span class="badge bg-success">Success</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            5th Dec 2024 - Rs. 199 Plan <span class="badge bg-danger">Failed</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
- <!-- Transaction History Modal -->
-<div class="modal fade" id="transactionHistoryModal" tabindex="-1" aria-labelledby="transactionHistoryLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-           
-            <div class="modal-header text-white" style="background-color: #54388b;">
-                <h5 class="modal-title" id="transactionHistoryLabel">Transaction History</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-         
-            <div class="modal-body text-center" id="transactionModalBody">
-             
-                <div id="transactionLoading" class="my-3">
-                    <img src="../img/loader.gif" alt="Loading..." width="100">
-                    <p class="mt-2">Fetching transaction history...</p>
-                </div>
-
-            
-                <div id="transactionContent" style="display: none;">
-                    <div class="p-3 rounded" style="background-color: #f8f9fa;">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>20th Feb 2025</td>
-                                    <td class="text-success">₹199</td>
-                                    <td class="text-primary">Success</td>
-                                </tr>
-                                <tr>
-                                    <td>10th Feb 2025</td>
-                                    <td class="text-success">₹499</td>
-                                    <td class="text-primary">Success</td>
-                                </tr>
-                                <tr>
-                                    <td>1st Feb 2025</td>
-                                    <td class="text-danger">₹299</td>
-                                    <td class="text-warning">Pending</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <!-- Auto-Recharge Modal -->
 <div class="modal fade" id="autoRechargeModal" tabindex="-1" aria-labelledby="autoRechargeModalLabel" aria-hidden="true">
@@ -534,25 +454,6 @@
         </div>
     </div>
 </div>
-
-<!-- Plan Selection Modal -->
-<div class="modal fade" id="planSelectionModal" tabindex="-1" aria-labelledby="planSelectionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="planSelectionModalLabel">Select a Plan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="list-group">
-                    <button class="list-group-item list-group-item-action" onclick="selectPlan(199)">Plan ₹199 - 28 Days, 1.5GB/day</button>
-                    <button class="list-group-item list-group-item-action" onclick="selectPlan(299)">Plan ₹299 - 56 Days, 2GB/day</button>
-                    <button class="list-group-item list-group-item-action" onclick="selectPlan(399)">Plan ₹399 - 84 Days, 2.5GB/day</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <script>
         
@@ -577,62 +478,76 @@
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".view-recharge-history").addEventListener("click", function () {
-        let modal = new bootstrap.Modal(document.getElementById("rechargeHistoryModal"));
-        modal.show();
+    // Retrieve user and plan data from session storage
+    let userData = sessionStorage.getItem("user");
+    // let planData = sessionStorage.getItem("plan");
+    // let rechargeData = sessionStorage.getItem("rechargeData");
 
-        document.getElementById("historyLoading").style.display = "block";
-        document.getElementById("historyContent").style.display = "none";
+    if (userData) {
+        let user = JSON.parse(userData);
+        document.getElementById("loggedInUser").textContent = user.fullName;
+        document.getElementById("username").textContent = user.fullName;
+        document.getElementById("phoneNo").textContent = user.phoneNumber;
+        let userId = user.userId; // Extract user ID
 
-        setTimeout(function () {
-            document.getElementById("historyLoading").style.display = "none";
-            document.getElementById("historyContent").style.display = "block";
-        }, 1500);
-    });
+        // API endpoint to fetch current active plan
+        let apiUrl = `http://localhost:8083/api/recharges/user/${userId}/current-plan`;
+
+        // Fetch the active plan using the stored token
+        fetch(apiUrl, {
+            method: "GET",
+            headers: {
+                // "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message || "Failed to fetch active plan"); });
+            }
+            return response.json();
+        })
+        .then(plan => {
+            // Assuming the response is the plan object itself
+            if (plan) {
+                let expiryDate = new Date(); // Since expiryDate isn't returned, assume it's validity-based
+                let remainingDays = "N/A"; // Default value
+
+                if (plan.validity && plan.validity.toLowerCase() !== "unlimited") {
+                    let validityDays = parseInt(plan.validity); // Extract days from validity
+                    expiryDate.setDate(expiryDate.getDate() + validityDays);
+                    let today = new Date();
+                    remainingDays = Math.max(0, Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24))); // Calculate days left
+                }
+
+                // Update Active Plan Info
+                document.getElementById("activePlan").innerHTML = 
+                    `<i class="bi bi-lightning-fill me-2"></i> Active Plan: ${plan.voice} + ${plan.data}`;
+
+                // Update Expiry Badge
+                let expiryBadge = document.getElementById("expiryBadge");
+                expiryBadge.textContent = `Expires in ${remainingDays} days`;
+                expiryBadge.style.display = "block"; // Show badge
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching active plan:", error);
+            document.getElementById("activePlan").innerHTML = 
+                `<i class="bi bi-lightning-fill me-2"></i> No active plan found`;
+        });
+    }
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".view-transaction-history").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                let modal = new bootstrap.Modal(document.getElementById("transactionHistoryModal"));
-                modal.show();
 
-                document.getElementById("transactionLoading").style.display = "block";
-                document.getElementById("transactionContent").style.display = "none";
 
-                setTimeout(function () {
-                    document.getElementById("transactionLoading").style.display = "none";
-                    document.getElementById("transactionContent").style.display = "block";
-                }, 1500);
-            });
-        });
-    });
+
 
     function logoutUser() {
-        localStorage.removeItem("phoneNo"); 
+        sessionStorage.clear();
         window.location.href = "userLogin.html"; 
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        let phoneNo = localStorage.getItem("phoneNo");
-        let loggedInUser=localStorage.getItem("loggedInUser");
-        if (loggedInUser) {
-            document.getElementById("loggedInUser").textContent = JSON.parse(loggedInUser).name;
-            document.getElementById("username").textContent = JSON.parse(loggedInUser).name;
-        }else{
 
-        }
-
-        if (phoneNo) {
-            document.getElementById("phoneNo").textContent = phoneNo;
-        }
-    });
-
-    function selectPlan(amount) {
-        document.getElementById("amount").value = amount;
-        var modal = bootstrap.Modal.getInstance(document.getElementById('planSelectionModal'));
-        modal.hide();
-    }
 
     // Show or hide the threshold field based on frequency selection
     document.getElementById("frequency").addEventListener("change", function () {

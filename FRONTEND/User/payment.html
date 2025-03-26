@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        body {
+             background-color: #e2d8fa; 
+            }
+            .payment-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            margin-top: 50px;
+            width: 100%;
+            max-width: 1100px; /* Increased the width */
+        }
+        .btn-primary { background-color: #54388b; border: none; }
+        .btn-primary:hover { background-color: #432e6d; }
+        .error { color: red; font-size: 0.9em; }
+
+        @media (max-width: 768px) {
+            .payment-container { padding: 20px; width: 100%; }
+            .btn-primary { padding: 8px; font-size: 14px; }
+        }
+        
+        @media (max-width: 480px) {
+            .payment-container { padding: 15px; }
+            .btn-primary { padding: 8px; font-size: 12px; }
+        }
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #007bff;
+        }
+        .back-button:hover {
+            text-decoration: underline;
+        }
+        .summary-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .payment-icons img { width: 40px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center">
+        <div class="payment-container">
+            <button class="back-button mb-3" onclick="goBack()">← Back</button>
+            <h4 class="text-center mb-4">Select Payment Method</h4>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <form id="paymentForm">
+                        <div class="mb-3">
+                            <label for="planAmount" class="form-label"><b>Amount</b></label>
+                            <input type="text" id="planAmount" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><b>Payment Method</b></label>
+                            <div class="payment-options">
+                                <label><input type="radio" name="paymentMethod" value="upi" required> UPI</label>
+                                <div id="upi"></div>
+                                <label><input type="radio" name="paymentMethod" value="credit_card"> Credit Card</label>
+                                <div id="cc"></div>
+                                <label><input type="radio" name="paymentMethod" value="net_banking"> Net Banking</label>
+                            </div>
+                        </div>
+                        <!-- <button type="submit" class="btn btn-primary w-100">Proceed to Pay</button> -->
+                    </form>
+                </div>
+                <div class="col-md-6 summary-box">
+                    <h5>Payment Summary</h5>
+                    <p><strong>Plan:</strong> <span id="planName"></span></p>
+                    <p><strong>Price:</strong> <span id="planPrice"></span></p>
+                    <p><strong>Discount:</strong> ₹0</p>
+                    <p class="total-amount"><strong>Total Payable:</strong> <span id="totalAmount" style="color: rgb(57, 57, 237) ;font-size: 18px;font-weight: bold;"></span></p>
+                    <hr>
+                    <!-- <h5>User Details</h5>
+                    <p><strong>Name:</strong> <span id="userName"></span></p>
+                    <p><strong>Phone:</strong> <span id="userPhone"></span></p> -->
+
+                    <!-- Proceed to Pay button moved inside the summary box -->
+                    <button type="submit" class="btn btn-primary w-100 mt-3" onclick="processPayment()">Proceed to Pay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div class="modal fade" id="invoiceModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background-color: #54388b;">
+                    <h5 class="modal-title">Payment Successful!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Your payment was successfully processed.</p>
+                    <p><strong>Transaction ID:</strong> <span id="transactionId">N/A</span></p>
+                    <p><strong>Amount Paid:</strong> <span id="paidAmount"></span></p>
+                    <p><strong>Payment Method:</strong> <span id="paidMethod"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="redirectToRecharge()">Close</button>
+                    <button type="button" class="btn btn-success" onclick="downloadInvoice()">Download Invoice</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function goBack() {
+                history.back();
+            }
+        
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(sessionStorage.getItem("user"));
+            const plan = JSON.parse(sessionStorage.getItem("plan"));
+            if (plan) {
+                document.getElementById("planName").textContent = plan.category.categoryName;
+                document.getElementById("planPrice").textContent = `₹${plan.price}`;
+                document.getElementById("totalAmount").textContent = `₹${plan.price}`;
+                document.getElementById("planAmount").value = `₹${plan.price}`;
+            }
+        });
+
+
+        document.querySelectorAll("input[name='paymentMethod']").forEach(radio => {
+            radio.addEventListener("change", function () {
+                document.getElementById("upi").innerHTML = "";
+                document.getElementById("cc").innerHTML = "";
+
+                if (this.value === "upi") {
+                    document.getElementById("upi").innerHTML = `
+                        <label>Select UPI App</label>
+                        <select id="upiApp" class="form-select" required>
+                            <option value="phonepe">PhonePe</option>
+                            <option value="googlepay">Google Pay</option>
+                        </select>
+                        <label for="upiId">UPI ID</label>
+                        <input type="text" id="upiId" class="form-control" required>
+                        <span id="upiError" class="error"></span>
+                    `;
+                } else if (this.value === "credit_card") {
+                    document.getElementById("cc").innerHTML = `
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" class="form-control" required>
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" class="form-control" required>
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" class="form-control" required>
+                    `;
+
+                    document.getElementById("cc").innerHTML = `
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" required oninput="formatCardNumber(this)">
+                        
+                        <label for="expiryDate">Expiry Date (MM/YY)</label>
+                        <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY" maxlength="5" required oninput="formatExpiryDate(this)">
+                        
+                        <label for="cvv">CVV</label>
+                        <input type="password" id="cvv" class="form-control" placeholder="123" maxlength="3" required>
+                        
+                        <span id="cardError" class="error"></span>
+                    `;
+
+
+                }
+            });
+        });
+
+
+        
+        function formatCardNumber(input) {
+                    input.value = input.value.replace(/\D/g, ""); // Remove non-numeric characters
+                    input.value = input.value.replace(/(.{4})/g, "$1 ").trim(); // Add space every 4 digits
+                }
+
+                function formatExpiryDate(input) {
+                    input.value = input.value.replace(/\D/g, ""); // Remove non-numeric characters
+                    if (input.value.length > 2) {
+                        input.value = input.value.slice(0, 2) + "/" + input.value.slice(2, 4);
+                    }
+                }
+        
+
+                function generateTransactionId() {
+            const timestamp = Date.now().toString(36); // Convert timestamp to base-36
+            const randomPart = Math.random().toString(36).substr(2, 5).toUpperCase(); // Random string
+            return `TXN-${timestamp}-${randomPart}`;
+        }
+
+    function processPayment() {
+    const amount = parseFloat(document.getElementById("planAmount").value.replace("₹", "").trim());
+    const method = document.querySelector("input[name='paymentMethod']:checked");
+
+    if (!method) {
+        Swal.fire("Error", "Please select a payment method!", "error");
+        return;
+    }
+
+    let isValid = true;
+    let paymentDetails = {};
+
+    // Validate payment details based on selected method
+    if (method.value === "upi") {
+        const upiId = document.getElementById("upiId")?.value.trim();
+        const upiPattern = /^[a-zA-Z0-9]+@[a-zA-Z]+$/;
+
+        if (!upiId || !upiPattern.test(upiId)) {
+            document.getElementById("upiError").textContent = "Invalid UPI ID format";
+            isValid = false;
+        } else {
+            paymentDetails.upiId = upiId;
+        }
+    } 
+    else if (method.value === "credit_card") {
+        const cardNumber = document.getElementById("cardNumber")?.value.trim();
+        const expiryDate = document.getElementById("expiryDate")?.value.trim();
+        const cvv = document.getElementById("cvv")?.value.trim();
+
+        const cardPattern = /^\d{4} \d{4} \d{4} \d{4}$/;
+        const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        const cvvPattern = /^\d{3}$/;
+
+        if (!cardNumber || !cardPattern.test(cardNumber)) {
+            Swal.fire("Error", "Invalid Card Number!", "error");
+            isValid = false;
+        } else if (!expiryDate || !expiryPattern.test(expiryDate)) {
+            Swal.fire("Error", "Invalid Expiry Date! Format: MM/YY", "error");
+            isValid = false;
+        } else if (!cvv || !cvvPattern.test(cvv)) {
+            Swal.fire("Error", "Invalid CVV!", "error");
+            isValid = false;
+        } else {
+            paymentDetails.cardNumber = `**** **** **** ${cardNumber.slice(-4)}`;
+        }
+    }
+
+    if (!isValid) return;
+
+    Swal.fire({
+        title: "Processing Payment...",
+        text: `Your payment of ₹${amount} is being processed.`,
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false
+    });
+
+    const user = JSON.parse(sessionStorage.getItem("rechargeUser"));
+    const plan = JSON.parse(sessionStorage.getItem("plan"));
+
+    if (user && plan) {
+        // Extract numeric validity value
+        const validityDays = parseInt(plan.validity.replace(/\D/g, ""), 10) || 0; // Extract only numbers
+
+        fetch("http://localhost:8083/api/recharges/process", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId: user.userId,
+                planId: plan.planId,
+                validityDays: validityDays,
+                amount: amount,
+                paymentMethod: method.value,
+                paymentDetails: paymentDetails
+            })
+        })
+        .then(data => {
+            Swal.fire("Success", "Your payment was successful!", "success");
+            const dummyTransactionId = generateTransactionId();
+
+
+            // Set modal data
+            document.getElementById("transactionId").textContent = dummyTransactionId || "N/A";
+            document.getElementById("paidAmount").textContent = `₹${amount}`;
+            document.getElementById("paidMethod").textContent = method.value;
+
+            // Show the invoice modal
+            const invoiceModal = new bootstrap.Modal(document.getElementById("invoiceModal"));
+            invoiceModal.show();
+        })
+        .then(data => {
+            Swal.fire("Payment Successful!", `Your payment of ₹${amount} was successful.`, "success");
+            console.log("Transaction & Recharge saved:", data);
+        })
+        .catch(error => {
+            console.error("Error saving transaction:", error);
+            Swal.fire("Error", "Failed to process payment. " + error.message, "error");
+        });
+    }
+}
+
+
+        
+function downloadInvoice() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+
+    const user = JSON.parse(sessionStorage.getItem("rechargeUser"));
+    const plan = JSON.parse(sessionStorage.getItem("plan"));
+    const transactionId = document.getElementById("transactionId").textContent;
+    const amount = document.getElementById("paidAmount").textContent;
+    const paymentMethod = document.getElementById("paidMethod").textContent;
+    
+    // Set colors and styles
+    doc.setFillColor(0, 123, 255);
+    doc.rect(0, 0, 210, 40, "F"); // Header background
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.text("Mobile Prepaid Invoice", 15, 20);
+
+    // User & Payment Details
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Transaction ID: ${transactionId}`, 15, 50);
+    doc.text(`Name: ${user.fullName}`, 15, 60);
+    doc.text(`Phone: ${user.phoneNumber}`, 15, 70);
+    doc.text(`Plan: ${plan.category.categoryName}`, 15, 80);
+    doc.text(`Validity: ${plan.validity}`, 15, 90);
+    doc.text(`Amount Paid: ${amount}`, 15, 100);
+    doc.text(`Payment Method: ${paymentMethod}`, 15, 110);
+    doc.text(`Date: ${new Date().toLocaleString()}`, 15, 120);
+
+    // Footer
+    doc.setFillColor(240, 240, 240);
+    doc.rect(0, 270, 210, 30, "F");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Thank you for choosing our mobile prepaid service!", 15, 280);
+    
+    // Save PDF
+    doc.save(`Invoice_${transactionId}.pdf`);
+}
+
+
+    function redirectToRecharge(){
+        window.location.href = "Recharge.html";
+
+    }
+
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

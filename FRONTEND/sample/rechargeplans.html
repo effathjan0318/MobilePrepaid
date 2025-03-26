@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plans Display</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Plans</h2>
+        <ul class="nav nav-tabs" id="categoryTabs"></ul>
+        <div class="tab-content mt-3" id="plansContainer"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchCategories();
+        });
+
+        async function fetchCategories() {
+            try {
+                const categoryResponse = await fetch('http://localhost:8083/api/categories');
+                const categories = await categoryResponse.json();
+                renderCategories(categories);
+                fetchPlans();
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        }
+
+        async function fetchPlans() {
+            try {
+                const planResponse = await fetch('http://localhost:8083/api/plans');
+                const plans = await planResponse.json();
+                renderPlans(plans);
+            } catch (error) {
+                console.error("Error fetching plans:", error);
+            }
+        }
+
+        function renderCategories(categories) {
+            const categoryTabs = document.getElementById("categoryTabs");
+            categoryTabs.innerHTML = '';
+
+            categories.forEach((category, index) => {
+                const tab = document.createElement("li");
+                tab.classList.add("nav-item");
+                tab.innerHTML = `
+                    <button class="nav-link ${index === 0 ? 'active' : ''}" data-bs-toggle="tab" 
+                        data-bs-target="#category-${category.categoryId}" role="tab">
+                        ${category.categoryName}
+                    </button>`;
+                categoryTabs.appendChild(tab);
+            });
+        }
+
+        function renderPlans(plans) {
+            const plansContainer = document.getElementById("plansContainer");
+            plansContainer.innerHTML = '';
+            
+            const categorizedPlans = {};
+            plans.forEach(plan => {
+                if (!categorizedPlans[plan.category.categoryId]) {
+                    categorizedPlans[plan.category.categoryId] = [];
+                }
+                categorizedPlans[plan.category.categoryId].push(plan);
+            });
+            
+            Object.keys(categorizedPlans).forEach((categoryId, index) => {
+                const plansList = categorizedPlans[categoryId].map(plan => `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">${plan.note}</h5>
+                            <p class="card-text"><strong>Validity:</strong> ${plan.validity}</p>
+                            <p class="card-text"><strong>Price:</strong> ₹${plan.price}</p>
+                            <p class="card-text"><strong>Data:</strong> ${plan.data}</p>
+                            <p class="card-text"><strong>Voice:</strong> ${plan.voice}</p>
+                            <p class="card-text"><strong>SMS:</strong> ${plan.sms}</p>
+                            <p class="card-text"><strong>Network:</strong> ${plan.network}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+                const tabPane = document.createElement("div");
+                tabPane.classList.add("tab-pane", "fade", index === 0 ? "show": "active" , "");
+                tabPane.id = `category-${categoryId}`;
+                tabPane.innerHTML = plansList;
+                plansContainer.appendChild(tabPane);
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

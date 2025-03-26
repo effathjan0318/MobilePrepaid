@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .profile-container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            position: relative;
+        }
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #007bff;
+        }
+        .back-button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-container">
+    <button class="back-button" onclick="goBack()">← Back</button>
+
+    <h3 class="text-center">User Profile Settings</h3>
+    
+    <div class="text-center">
+        <img id="profileImage" src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fdefault-user&psig=AOvVaw08jp18ibmecESNsEIznMlX&ust=1742534373368000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIjUqMT0l4wDFQAAAAAdAAAAABAE" class="profile-picture mb-3">
+        <br>
+        <input type="file" id="uploadImage" class="d-none" accept="image/*">
+        <button class="btn btn-outline-primary btn-sm" onclick="document.getElementById('uploadImage').click();">
+            Change Profile Picture
+        </button>
+    </div>
+
+    <form id="profileForm" onsubmit="saveProfile(event)">
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="userName" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="userEmail" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input type="text" id="userPhone" class="form-control" readonly>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+    </form>
+</div>
+
+<script>
+    async function loadProfile() {
+        try {
+            
+
+            const loggedInUser = sessionStorage.getItem("user");
+            
+
+            if (loggedInUser) {
+                let user = JSON.parse(loggedInUser);
+                
+                document.getElementById("userName").value = user.fullName;
+                document.getElementById("userEmail").value = user.email;
+                document.getElementById("userPhone").value = user.phoneNumber;
+                document.getElementById("profileImage").src = user.profileImageUrl;
+
+                localStorage.setItem("userProfile", JSON.stringify(user));
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    }
+
+    function saveProfile(event) {
+        event.preventDefault();
+
+        const updatedEmail = document.getElementById("userEmail").value;
+        let userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
+        userProfile.email = updatedEmail;
+        localStorage.setItem("userProfile", JSON.stringify(userProfile));
+        localStorage.setItem("loggedInUser", updatedEmail);
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Your email has been updated.',
+            showConfirmButton: false,
+            timer: 2000
+        });
+
+        setTimeout(() => {
+            history.back(); // Go back to the previous page
+        }, 2000);
+    }
+
+    function goBack() {
+        history.back();
+    }
+
+    document.getElementById('uploadImage').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById("profileImage").src = reader.result;
+                let userProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
+                userProfile.profilePic = reader.result;
+                localStorage.setItem("userProfile", JSON.stringify(userProfile));
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", loadProfile);
+
+    
+</script>
+
+</body>
+</html>

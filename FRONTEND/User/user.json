@@ -1,0 +1,26 @@
+
+[
+    {
+        "name": "Effathjan",
+        "number": "9140401086",
+        "email": "eff@gmail.com",
+        "profilePic": "https://wallpapers.com/images/featured/cute-profile-picture-s52z1uggme5sj92d.jpg"
+        
+    },
+    {
+        "name": "smith",
+        "number": "9876543210",
+        "email": "smith@gmail.com",
+        "profilePic": "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg"
+        
+        
+    },
+    {
+        "name": "Jane",
+        "number": "9123456789",
+        "email": "jane@gmail.com",
+        "profilePic": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
+        
+
+    }
+]

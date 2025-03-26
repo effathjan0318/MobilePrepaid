@@ -216,7 +216,7 @@
                         <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
                     </li>
                     <li class="nav-item"></li>
-                        <a class="nav-link" href="#"><i class="bi bi-sim"></i> Get SIM</a>
+                        <a class="nav-link" href="./getSIM.html"><i class="bi bi-sim"></i> Get SIM</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -224,7 +224,7 @@
                             <i class="bi bi-person-circle"></i> <span id="loggedInUser">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="./userProfileSettings.html"><i class="bi bi-gear"></i> Settings</a></li>
                             <li><a class="dropdown-item" href="#" style="color: red;" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                         </ul>
                     </li>
@@ -305,8 +305,8 @@
             <label for="networkType" class="form-label mt-3">Network Type:</label>
             <select class="form-select" id="networkType" onchange="filterPlans()">
                 <option value="all">All</option>
-                <option value="4g">4G</option>
-                <option value="5g">5G</option>
+                <option value="4G">4G</option>
+                <option value="5G">5G</option>
             </select>
             
             <label for="talktime" class="form-label mt-3">Talktime:</label>
@@ -393,86 +393,219 @@
     
     <script>
 
-        function redirectToPayment(){
-            window.location.href = "payment.html"; 
-        }
-        function logoutUser() {
-        localStorage.removeItem("phoneNo"); 
-        window.location.href = "userLogin.html"; 
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        let phoneNo = localStorage.getItem("phoneNo");
-        let loggedInUser=localStorage.getItem("loggedInUser");
-        if (loggedInUser) {
-            document.getElementById("loggedInUser").textContent = JSON.parse(loggedInUser).name;
-    
-        }
-        if (phoneNo) {
-            document.getElementById("phoneNo").textContent = phoneNo;
-        }
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        let storedPhone = localStorage.getItem("phoneNo");
-        if (storedPhone) {
-            document.getElementById("phoneNo").value = storedPhone;
-        }
-    });
-
-    async function validateAndCheckUser() {
-        let phoneInput = document.getElementById("phoneNo");
-        let phone = phoneInput.value.trim();
-        let errorMessage = document.getElementById("errorMessage");
-
-        let phoneRegex = /^[6-9]\d{9}$/;
-        if (!phoneRegex.test(phone)) {
-            errorMessage.textContent = "Invalid phone number! Enter a valid 10-digit number.";
-            return;
-        }
-
+async function displayLoggedInUser() {
         try {
-            let response = await fetch("user.json");
+            let phoneNo = localStorage.getItem("phoneNo");
+            if (!phoneNo) return;
+            
+            let response = await fetch("http://localhost:8083/api/users");
+            if (!response.ok) {
+                throw new Error("Failed to fetch user data");
+            }
             let users = await response.json();
-            console.log(users);
-            let userExists = users.some(user => user.number === phone);
-            if (userExists) {
-                errorMessage.textContent = ""; 
-                window.location.href = "#LovedPlans"; 
-            } else {
-                errorMessage.textContent = "Phone number not registered!";
+            
+            let user = users.find(user => user.phoneNumber === phoneNo);
+            if (user) {
+                document.getElementById("loggedInUser").textContent = user.fullName;
             }
         } catch (error) {
-            console.error("Error fetching user data:", error);
-            errorMessage.textContent = "Error fetching user data. Try again later.";
+            console.error("Error fetching logged-in user:", error);
         }
     }
 
+    displayLoggedInUser();
 
-    let allPlans = [];
-
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch("plans.json")
-            .then(response => response.json())
-            .then(data => {
-                allPlans = data;
-                updateActiveTab(allPlans);
-            });
-
-        document.querySelectorAll(".nav-link").forEach(tab => {
-            tab.addEventListener("click", function () {
-                setTimeout(() => updateActiveTab(), 100);
-            });
-        });
-    });
-
-    function updateActiveTab(filteredPlans = allPlans) {
-        let activeTab = document.querySelector('.nav-link.active').getAttribute('href').substring(1);
-        let categoryPlans = activeTab === "all" ? filteredPlans : filteredPlans.filter(plan => plan.category === activeTab);
-        displayPlans(categoryPlans);
+    function redirectToPayment(){
+        window.location.href = "payment.html"; 
     }
 
-    function filterPlans() {
+    async function validateAndCheckUser() {
+    let phoneInput = document.getElementById("phoneNo");
+    let phone = phoneInput.value.trim();
+    let errorMessage = document.getElementById("errorMessage");
+
+    let phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+        errorMessage.textContent = "Invalid phone number! Enter a valid 10-digit number.";
+        return;
+    }
+
+    try {
+        let response = await fetch("http://localhost:8083/api/users");
+        if (!response.ok) {
+            throw new Error("Failed to fetch user data.");
+        }
+
+        let users = await response.json();
+        let userExists = users.some(user => user.phoneNumber === phone);
+
+        if (userExists) {
+            errorMessage.textContent = ""; 
+            localStorage.setItem("phoneNo", phone);
+            window.location.href = "#LovedPlans"; 
+        } else {
+            errorMessage.textContent = "Phone number not registered!";
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        errorMessage.textContent = "Error fetching user data. Try again later.";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        await fetchCategories();
+        await fetchPlans();
+    } catch (error) {
+        console.error("Error initializing data:", error);
+    }
+
+    document.querySelectorAll(".nav-link").forEach(tab => {
+        tab.addEventListener("click", function () {
+        let selectedCategory = this.getAttribute("data-category") || "all";
+        fetchPlans(selectedCategory);
+    });
+    });
+});
+
+
+let allPlans = [];
+let allCategories = [];
+
+
+async function fetchCategories() {
+    try {
+        let response = await fetch("http://localhost:8083/api/categories");
+        if (!response.ok) throw new Error("Failed to fetch categories");
+
+        allCategories = await response.json();
+        updateCategoryTabs(allCategories);
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+    }
+}
+
+
+function updateCategoryTabs(categories) {
+    let tabContainer = document.getElementById("planTabs");
+    tabContainer.innerHTML = `<li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#all">All Plans</a>
+    </li>`;
+
+    categories.forEach(category => {
+        console.log(category);
+        let categoryName = category.categoryName 
+        console.log(categoryName);
+        tabContainer.innerHTML += `
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#${categoryName}" data-category="${categoryName}">${category.categoryName}</a>
+            </li>
+        `;
+    });
+}
+
+async function fetchPlans(category = "all") {
+    try {
+        let url = category === "all"
+            ? "http://localhost:8083/api/plans"
+            : `http://localhost:8083/api/plans/category/${encodeURIComponent(category)}`;
+
+        console.log("Fetching from:", url); 
+
+        let response = await fetch(url);
+        let data = await response.json();
+
+        console.log("API Response:", data); 
+
+        if (!response.ok || !Array.isArray(data)) throw new Error("Failed to fetch plans");
+
+        allPlans = data; 
+        displayPlans(data);
+    } catch (error) {
+        console.error("Error fetching plans:", error);
+    }
+}
+
+function displayPlans(plans) {
+    let container = document.getElementById("plansContainer");
+    container.innerHTML = "";
+
+    if (plans.length === 0) {
+        container.innerHTML = "<p class='text-center'>No plans available.</p>";
+        return;
+    }
+
+    plans.forEach(plan => {
+        let planHTML = `
+            <div class="plan card p-3 mb-3">
+                <h3>₹${plan.price}</h3>
+                <div class="d-flex flex-row gap-5">
+                    <p><b>Validity:</b> ${plan.validity}</p>
+                    <p><b>Data:</b> ${plan.data}</p>
+                    <p><b>Calls:</b> ${plan.voice}</p>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" onclick="viewPlanDetails(${plan.planId})">View Details</button>
+                </div>
+            </div>
+        `;
+        container.innerHTML += planHTML;
+    });
+}
+
+
+function viewPlanDetails(planId) {
+    let plan = allPlans.find(p => p.planId === planId);
+    if (!plan) {
+        console.error("Plan not found:", planId);
+        return;
+    }
+
+    
+    let existingModal = document.getElementById("planModal");
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    let modalHTML = `
+        <div class="modal fade" id="planModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Plan Details - ₹${plan.price}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><b>Validity:</b> ${plan.validity}</p>
+                        <p><b>Data:</b> ${plan.data}</p>
+                        <p><b>Calls:</b> ${plan.voice}</p>
+                        <p><b>Network:</b> ${plan.network.toUpperCase()}</p>
+                        <p><b>Talktime:</b> ${plan.talktime === "yes" ? "Included" : "Not Included"}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="./payment.html?amount=${plan.price}">
+                            <button class="btn btn-success">Proceed to Recharge</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+   
+    let planModal = new bootstrap.Modal(document.getElementById("planModal"));
+    planModal.show();
+
+    document.getElementById("planModal").addEventListener("hidden.bs.modal", function () {
+        document.getElementById("planModal").remove();
+    });
+}
+
+
+function filterPlans() {
         let maxPrice = document.getElementById("priceRange").value;
         document.getElementById("priceValue").textContent = `₹10 - ₹${maxPrice}`;
         let selectedNetwork = document.getElementById("networkType").value;
@@ -487,72 +620,12 @@
         updateActiveTab(filteredPlans);
     }
 
-    function displayPlans(plans) {
-        let container = document.getElementById("plansContainer");
-        container.innerHTML = "";
-
-        if (plans.length === 0) {
-            container.innerHTML = "<p class='text-center'>No plans available.</p>";
-            return;
-        }
-
-        plans.forEach(plan => {
-            let planHTML = `
-                <div class="plan">
-                    <h3>₹${plan.price}</h3>
-                    <div class="d-flex fex-row gap-5">
-                        <p><b>Validity:</b> ${plan.validity}</p>
-                        <p><b>Data:</b> ${plan.data}</p>
-                        <p><b>Calls:</b> ${plan.calls}</p>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary" onclick="viewPlanDetails(${plan.id})">View Details</button>
-                    </div>
-                </div>
-            `;
-            container.innerHTML += planHTML;
-        });
+    function updateActiveTab(filteredPlans = allPlans) {
+        let activeTab = document.querySelector('.nav-link.active').getAttribute('href').substring(1);
+        let categoryPlans = activeTab === "all" ? filteredPlans : filteredPlans.filter(plan => plan.category === activeTab);
+        displayPlans(categoryPlans);
     }
 
-    function viewPlanDetails(planId) {
-        let plan = allPlans.find(p => p.id === planId);
-        if (!plan) return;
-
-        let modalHTML = `
-    <div class="modal fade" id="planModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Plan Details - ₹${plan.price}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p><b>Validity:</b> ${plan.validity}</p>
-                    <p><b>Data:</b> ${plan.data}</p>
-                    <p><b>Calls:</b> ${plan.calls}</p>
-                    <p><b>Network:</b> ${plan.network.toUpperCase()}</p>
-                    <p><b>Talktime:</b> ${plan.talktime === "yes" ? "Included" : "Not Included"}</p>
-                </div>
-                <div class="modal-footer">
-                    <a href="./payment.html?amount=${plan.price}">
-                        <button class="btn btn-success">Proceed to Recharge</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-`;
-
-
-
-        document.body.insertAdjacentHTML("beforeend", modalHTML);
-        let planModal = new bootstrap.Modal(document.getElementById("planModal"));
-        planModal.show();
-        
-        document.getElementById("planModal").addEventListener("hidden.bs.modal", function () {
-            document.getElementById("planModal").remove();
-        });
-    }
 
     </script>
 </body>

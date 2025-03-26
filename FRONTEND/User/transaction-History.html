@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <style>
+        body { background-color: #f4f7fc; }
+        .history-container { max-width: 900px; margin: auto; }
+        .history-card {
+            background: #ffffff;
+            border-left: 5px solid #54388b;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .history-card:hover { transform: scale(1.02); }
+        .status-success { color: #28a745; }
+        .status-failed { color: #dc3545; }
+        .status-icon { font-size: 1.5rem; }
+        .transaction-date { font-size: 0.9rem; color: #6c757d; }
+    </style>
+</head>
+<body>
+
+    <div class="container history-container py-4">
+        <div class="text-center mb-4">
+            <h2 class="text-primary"><i class="bi bi-receipt"></i> Transaction History</h2>
+        </div>
+        <div>
+            <a href="Mobile.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </div>
+        <br>
+
+        <!-- Search and Filter -->
+        <div class="d-flex justify-content-between mb-3">
+            <input type="text" id="searchInput" class="form-control me-2" placeholder="🔍 Search..." onkeyup="filterResults()">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                <i class="bi bi-funnel"></i> Filters
+            </button>
+        </div>
+
+        <!-- Transaction List -->
+        <div id="transactionContent" class="list-group"></div>
+
+    </div>
+
+    <!-- Filter Modal -->
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel"><i class="bi bi-funnel"></i> Filter Transactions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="date" id="dateFilter" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <select id="statusFilter" class="form-select">
+                            <option value="">Payment Status</option>
+                            <option value="Success">Success</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" onclick="filterResults()" data-bs-dismiss="modal">
+                        <i class="bi bi-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let user = JSON.parse(sessionStorage.getItem("user"));
+            if (!user || !user.userId) {
+                alert("User not found. Redirecting...");
+                window.location.href = "userLogin.html";
+                return;
+            }
+
+            let userId = user.userId;
+            let apiUrl = `http://localhost:8083/api/transactions/user/${userId}`;
+
+            fetch(apiUrl, {
+                method: "GET"
+            })
+            .then(response => response.json())
+            .then(data => {
+                sessionStorage.setItem("transactionData", JSON.stringify(data));
+                populateTransactionList(data);
+            })
+            .catch(error => console.error("Error fetching transactions:", error));
+        });
+
+        function populateTransactionList(data) {
+            let transactionContent = document.getElementById("transactionContent");
+            transactionContent.innerHTML = "";
+
+            if (data.length === 0) {
+                transactionContent.innerHTML = `<div class="text-center text-muted">
+                    <i class="bi bi-exclamation-circle"></i> No transactions found.
+                </div>`;
+                return;
+            }
+
+            data.forEach(transaction => {
+
+                let invoiceButton = `<button class="btn btn-sm btn-outline-primary" onclick='downloadInvoice(${JSON.stringify(transaction)})'>
+                    <i class="bi bi-download"></i> Download Invoice
+                </button>`;
+                let statusIcon = transaction.status === "SUCCESS"
+                    ? `<i class="bi bi-check-circle-fill status-icon status-success"></i>`
+                    : `<i class="bi bi-x-circle-fill status-icon status-failed"></i>`;
+                let statusText = `<span class="badge ${transaction.status === "SUCCESS" ? "bg-success" : "bg-danger"}">${transaction.status}</span>`;
+
+                let transactionCard = `<div class="list-group-item history-card p-3 mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-credit-card text-primary me-3 status-icon"></i>
+                        <div>
+                            <h5 class="mb-1">Transaction ID: #${transaction.paymentId}</h5>
+                            <p class="mb-1 text-muted">Amount: Rs. ${transaction.amount}</p>
+                            <p class="mb-0 transaction-date"><i class="bi bi-calendar"></i> ${new Date(transaction.timestamp).toLocaleDateString()}</p>
+                        </div>
+                        <div class="ms-auto text-end">
+                            ${statusIcon}
+                            <br>
+                            ${statusText}
+                            <br>
+                            <br>
+                            ${invoiceButton}
+                        </div>
+                    </div>
+                </div>`;
+
+                transactionContent.innerHTML += transactionCard;
+            });
+        }
+
+        function filterResults() {
+    let data = JSON.parse(sessionStorage.getItem("transactionData")) || [];
+    let searchQuery = document.getElementById("searchInput").value.toLowerCase();
+    let selectedDate = document.getElementById("dateFilter").value;
+    let selectedStatus = document.getElementById("statusFilter").value;
+
+    let filteredData = data.filter(transaction => {
+        let transactionId = transaction.paymentId ? transaction.paymentId.toString() : "";
+        let amount = transaction.amount ? transaction.amount.toString() : "";
+
+        let matchSearch = transactionId.includes(searchQuery) || amount.includes(searchQuery);
+        let matchDate = !selectedDate || new Date(transaction.timestamp).toISOString().split("T")[0] === selectedDate;
+        let matchStatus = !selectedStatus || transaction.status.toLowerCase() === selectedStatus.toLowerCase();
+
+        return matchSearch && matchDate && matchStatus;
+    });
+
+    populateTransactionList(filteredData);
+}
+
+
+        function downloadInvoice(transaction) {
+            if (!window.jspdf || !window.jspdf.jsPDF) {
+                console.error("jsPDF library is not loaded.");
+                alert("Error: Unable to generate invoice. Please try again later.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text("Invoice", 90, 10);
+            doc.setFontSize(12);
+
+            doc.text(`Transaction ID: #${transaction.paymentId}`, 10, 30);
+            doc.text(`User: ${transaction.user.fullName}`, 10, 40);
+            doc.text(`Phone: ${transaction.user.phoneNumber}`, 10, 50);
+            doc.text(`Email: ${transaction.user.email}`, 10, 60);
+            doc.text(`Address: ${transaction.user.address.street}, ${transaction.user.address.city}, ${transaction.user.address.state}, ${transaction.user.address.country}, ${transaction.user.address.pincode}`, 10, 70, { maxWidth: 180 });
+            doc.text(`Plan: ${transaction.recharge.plan.category.categoryName} - ${transaction.recharge.plan.validity}`, 10, 90);
+            doc.text(`Recharge Date: ${transaction.recharge.rechargeDate}`, 10, 100);
+            doc.text(`Expiry Date: ${transaction.recharge.expiryDate}`, 10, 110);
+            doc.text(`Amount Paid: Rs. ${transaction.amount}`, 10, 120);
+            doc.text(`Payment Method: ${transaction.paymentMethod}`, 10, 130);
+            doc.text(`Status: ${transaction.status}`, 10, 140);
+
+            doc.save(`Invoice_${transaction.paymentId}.pdf`);
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+</body>
+</html>

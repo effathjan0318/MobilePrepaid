@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Home</title>
+    <style>
+        body {
+            background-color:#e2d8fa ;    
+                 
+            font-family: Arial, sans-serif;
+            /* font-family: "Lato", serif; */
+            
+        }
+        .lato-light {
+            font-family: "Lato", serif;
+            font-weight: 300;
+            font-style: normal;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #54388b;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #000000;
+        }
+        .container-wide {
+            max-width: 1000px;
+        }
+        .container-recharge {
+            max-width: 500px;
+        }
+        .popular-plans, .customer-reviews {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+        }
+        .recharge-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 500px;  
+            width: 100%; 
+        }
+        .recharge-section button {
+            background: #54388b;
+            border: none;
+        }
+        .recharge-section button:hover {
+            background: #352457;
+        }
+        .pack-details{
+            display: flex;
+            justify-content: space-evenly;
+        }
+        .btn{
+            background-color: #54388b;
+            border: none;
+        }
+        .btn:hover{
+            background-color: #432e6d;
+        }
+        .footer {
+        background-color: #54388b;
+        color: white;
+        padding: 30px 0;
+        font-size: 14px;
+    }
+
+    .footer h5 {
+        color: #f4f7fc;
+        font-size: 23px;
+        margin-bottom: 15px;
+    }
+
+    .footer hr {
+        border: 1px solid #ffffff;
+        width: 50px;
+        margin-bottom: 15px;
+    }
+
+    .footer a {
+        color: #feffff;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .footer a:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }
+    .hero-section {
+            background: url('../img/h2.png') no-repeat center center/cover;
+            color: white;
+            text-align: left;
+            /* padding-left: 40px; */
+            padding: 100px 50px;
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .hero-section .btn {
+            background-color: #54388b;
+            border-color: #54388b;
+            /* border: none; */
+        }
+        .hero-section .btn:hover {
+            /* background-color: #6e4eaf; */
+            border-color: #feffff;
+            box-shadow: 0px 0px 5px #feffff;
+        }
+        .about-section {
+            background: #ffffff;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .about-section img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        @keyframes fadeSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        }
+
+        .hero-section h1 {
+            animation: fadeSlideUp 1s ease-out forwards;
+        }
+
+        .hero-section p {
+            animation: fadeSlideUp 1s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .hero-section .btn {
+            animation: fadeSlideUp 1s ease-out 1s forwards;
+            opacity: 0;
+        }
+
+        .popular-plan {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .popular-plan:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .review-card {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .review-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .review-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid #6a11cb;
+        margin-bottom: 10px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .review-card:hover .review-img {
+        transform: rotate(5deg) scale(1.1);
+    }
+
+    .review-text {
+        font-style: italic;
+        color: #444;
+        font-size: 16px;
+    }
+
+    .review-author {
+        font-weight: bold;
+        color: #333;
+    }
+    .review-card::before {
+        content: "";
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background: rgba(106, 17, 203, 0.2);
+        border-radius: 50%;
+        top: -10px;
+        right: -10px;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .review-card:hover::before {
+        transform: scale(1.5);
+    }
+
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="./Home.html">
+                <img src="../img/logo.png" alt="Logo" width="150"> 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./getSIM.html"><i class="bi bi-sim"></i> Get SIM</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./customerSupport.html"><i class="bi bi-headset"></i> Support</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> <span id="loggedInUser">Account</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="./Mobile.html"><i class="bi bi-gear"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#" style="color: red;" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1>Recharge Your Mobile <br> Instantly</h1>
+        <p>Fast, Secure, and Reliable Recharge Service</p>
+        <a href="./Recharge.html" class="btn btn-primary btn-lg">Recharge Now</a>
+    </section>
+
+
+
+    <section class="container text-center my-5 position-relative" style="background: linear-gradient(135deg, #54388b, #9182ae); padding: 50px; border-radius: 15px; overflow: hidden;">
+        <h2 class="mb-4 text-white animate__animated animate__fadeInDown">Latest Offers & Discounts</h2>
+        <div id="offersCarousel" class="carousel slide animate__animated animate__fadeIn" data-bs-ride="carousel">
+            <div class="carousel-inner text-center">
+                <div class="carousel-item active">
+                    <div class="card p-4 shadow-lg rounded" style="max-width: 500px; margin: auto; background: #ffffff;">
+                        <h2 class="text-primary">₹50 Cashback</h2>
+                        <p>On recharges above ₹299</p>
+                        <button class="btn btn-success claim-offer">Claim Now</button>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card p-4 shadow-lg rounded" style="max-width: 500px; margin: auto; background: #ffffff;">
+                        <h2 class="text-primary">Extra 1GB Data</h2>
+                        <p>With every ₹199 recharge</p>
+                        <button class="btn btn-success claim-offer">Get Offer</button>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card p-4 shadow-lg rounded" style="max-width: 500px; margin: auto; background: #ffffff;">
+                        <h2 class="text-primary">10% Off</h2>
+                        <p>On first recharge via UPI</p>
+                        <button class="btn btn-success claim-offer">Avail Now</button>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#offersCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#offersCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle p-2"></span>
+            </button>
+        </div>
+        
+        <canvas id="confetti-canvas" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none;"></canvas>
+    </section>
+    <!-- Popular Plans Section -->
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Popular Plans</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-lg p-4 rounded popular-plan animate__animated animate__fadeInUp">
+                    <h3 class="text-primary">₹299 Plan</h3>
+                    <p>Unlimited Calls + 2GB/day</p>
+                    <p>28 Days Validity</p>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge Now</button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-lg p-4 rounded popular-plan animate__animated animate__fadeInUp animate__delay-1s">
+                    <h3 class="text-primary">₹499 Plan</h3>
+                    <p>Unlimited Calls + 3GB/day</p>
+                    <p>56 Days Validity</p>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge Now</button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-lg p-4 rounded popular-plan animate__animated animate__fadeInUp animate__delay-2s">
+                    <h3 class="text-primary">₹799 Plan</h3>
+                    <p>Unlimited Calls + 3.5GB/day</p>
+                    <p>84 Days Validity</p>
+                    <button class="btn btn-primary" onclick="redirectToPayment()">Recharge Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Customer Reviews Section -->
+    <section class="container my-5 text-center">
+        <h2 class="mb-4 animate__animated animate__fadeInDown">Customer Reviews</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="review-card animate__animated animate__zoomIn">
+                    <img src="../img/review3.png" alt="profile pic" class="review-img">
+                    <p class="review-text">"Great service! Quick and reliable."</p>
+                    <h5 class="review-author">- Luna</h5>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="review-card animate__animated animate__zoomIn animate__delay-1s">
+                    <img src="../img/review4.png" alt="profile pic" class="review-img">
+                    <p class="review-text">"Absolutely seamless experience!"</p>
+                    <h5 class="review-author">- Alice Brown</h5>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="review-card animate__animated animate__zoomIn animate__delay-3s">
+                    <img src="../img/review6.jpg" alt="profile pic" class="review-img">
+                    <p class="review-text">"Reliable and fast. Highly recommended!"</p>
+                    <h5 class="review-author">- Michael Lee</h5>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="../img/abt us.jpg" alt="About Us">
+                </div>
+                <div class="col-md-6">
+                    <h2>About Prepaid Plus</h2>
+                    <p>Welcome to Prepaid Plus, your trusted partner for seamless and secure mobile recharges. We are dedicated to providing a hassle-free experience with the latest offers and reliable services.</p>
+                    <p>With a user-friendly interface and secure transactions, we ensure that you stay connected without any interruptions. Our commitment is to offer quick, efficient, and affordable solutions for all your prepaid needs.</p>
+                    <p>Join thousands of satisfied customers who rely on us for their mobile recharge needs. Experience convenience like never before!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+    
+             
+                <div class="col-md-3">
+                    <h5>About Prepaid Plus</h5>
+                    <hr>
+                    <p>Welcome to Prepaid Plus, your one-stop solution for seamless mobile recharges and prepaid management. We provide fast, secure, and hassle-free recharge services with a user-friendly experience.</p>
+                </div>
+                
+                <div class="col-md-3">
+                    <h5>Our Offerings</h5>
+                    <hr>
+                    <ul class="list-unstyled">
+                        <li><a href="./Recharge.html">Prepaid</a></li>
+                        <li><a href="./getSIM.html">Get New SIM</a></li>
+                        <li><a href="./Mobile.html">Set AutoPay</a></li>
+                    </ul>
+                </div>
+    
+              
+                <div class="col-md-3">
+                    <h5>Support</h5>
+                    <hr>
+                    <ul class="list-unstyled">
+                        <li><a href="./Mobile.html">My Account</a></li>
+                        <li><a href="./FAQ.html">FAQ</a></li>
+                        <li><a href="./customerSupport.html">Lost SIM</a></li>
+                        <li><a href="./customerSupport.html">Feedback</a></li>
+                    </ul>
+                </div>
+    
+                <div class="col-md-3">
+                    <h5>Connect with Us</h5>
+                    <hr>
+                    <p><i class="bi bi-geo-alt-fill"></i> Tamil Nadu, India</p>
+                    <p><i class="bi bi-envelope-fill"></i> prepaidplus@info.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 77068 55467</p>
+    
+            
+                    <div class="social-icons mt-3">
+                        <a href="#" class="me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+    
+            </div>
+    
+        </div>
+    </div>
+
+
+    <script>
+        
+    
+        function startConfetti() {
+            const canvas = document.getElementById("confetti-canvas");
+            const confettiSettings = { target: canvas, max: 150, size: 1.2, animate: true, respawn: true };
+            const confetti = new ConfettiGenerator(confettiSettings);
+            confetti.render();
+        }
+        
+        function stopConfetti() {
+            const canvas = document.getElementById("confetti-canvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function redirectToPayment(){
+            window.location.href = "Payment.html"; 
+        }
+
+document.addEventListener("DOMContentLoaded", function () {
+    startConfetti();
+    fetchLoggedInUserDetails();
+});
+
+async function fetchLoggedInUserDetails() {
+    try {
+        const token = getAuthToken();
+        const accountElement = document.getElementById("loggedInUser");
+
+        if (!token) {
+            console.warn("No authentication token found.");
+            accountElement.innerHTML = `<a href="login.html">Login</a>`;
+            return;
+        }
+
+        const response = await fetch("http://localhost:8083/api/users/current", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.status === 401 || response.status === 403) {
+            console.warn("Unauthorized access. Redirecting to login...");
+            accountElement.innerHTML = `<a href="login.html">Login</a>`;
+            return;
+        }
+
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+        const user = await response.json();
+        console.log("Logged-in User:", user);
+
+        // Display the user's full name in the navbar
+        accountElement.innerHTML = `
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle"></i> ${user.fullName}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        `;
+
+    } catch (error) {
+        console.error("Error fetching user details:", error);
+        document.getElementById("loggedInUser").innerHTML = `<a href="login.html">Login</a>`;
+    }
+}
+
+function getAuthToken() {
+    return sessionStorage.getItem("token") || 
+           localStorage.getItem("token") || 
+           (document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1] || null);
+}
+
+function logoutUser() {
+        sessionStorage.clear();
+        window.location.href = "userLogin.html"; 
+    }
+
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/confetti-js"></script>
+</body>
+</html>

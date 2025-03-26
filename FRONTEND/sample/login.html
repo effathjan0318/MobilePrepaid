@@ -15,6 +15,7 @@
             background-color: #ffffff;
             font-family: Arial, sans-serif;
             background: url('../img/bgadmin.jpg') no-repeat center center/cover;
+            background-attachment: fixed;
         }
         .container-login {
             display: flex;
@@ -70,23 +71,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-house-door"></i> Home</a>
+                        <a class="nav-link" href="./Home.html"><i class="bi bi-house-door"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-phone"></i> Mobile</a>
+                        <a class="nav-link" href="./userLogin.html"><i class="bi bi-phone"></i> Mobile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-lightning-fill"></i> Recharge</a>
+                        <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                        <a class="nav-link" href="./userLogin.html"><i class="bi bi-box-arrow-in-right"></i> Login</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container-login">
-        <form class="form-box" onsubmit="return sendOTP(event)">
+        <form class="form-box position-fixed" onsubmit="return sendOTP(event) ">
             <h2>Login</h2>
             <div class="mb-3 input-group">
                 <span class="input-group-text" style="background-color: #54388b;color: white;"><i class="bi bi-phone-fill"></i></span>
@@ -136,45 +137,84 @@
     }
 
     async function sendOTP(event) {
-        event.preventDefault();
-        if (document.getElementById("error-message").textContent !== "") {
-            return false;
-        }
+    event.preventDefault();
+    let phoneNo = document.getElementById("phoneNo").value;
+    let errorMsg = document.getElementById("error-message");
 
-        let phoneNo = document.getElementById("phoneNo").value;
-        let errorMsg = document.getElementById("error-message");
-
-        try {
-            let response = await fetch("./user.json");
-            let data = await response.json();
-            let users = data.users || data;
-
-            let user = users.find(user => user.number === phoneNo);
-            
-            if (user) {
-                localStorage.setItem("phoneNo", phoneNo);
-                let generatedOTP = Math.floor(100000 + Math.random() * 900000);
-                localStorage.setItem("otp", generatedOTP);
-                localStorage.setItem("loggedInUser", JSON.stringify(user));
-    
-                Swal.fire({
-                    title: "Your OTP Code",
-                    text: `Use this OTP to log in: ${generatedOTP}`,
-                    icon: "info",
-                    confirmButtonColor: "#54388b",
-                    confirmButtonText: "OK"
-                }).then(() => {
-                    window.location.href = "otp.html";
-                });
-
-            } else {
-                errorMsg.textContent = "This number is not registered.";
-            }
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-            errorMsg.textContent = "Error validating user. Please try again.";
-        }
+    if (!/^[6-9]\d{9}$/.test(phoneNo)) {
+        errorMsg.textContent = "Please enter a valid 10-digit mobile number.";
+        return false;
     }
+
+    try {
+        let response = await fetch("http://localhost:8083/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ phoneNumber: phoneNo }),
+            credentials: "include"  // Important for session handling
+        });
+
+        let responseData = await response.text(); // Log the exact response
+        console.log("Server Response:", responseData);
+
+        if (response.ok) {
+            let generatedOTP = Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem("otp", generatedOTP);
+
+            Swal.fire({
+                title: "Your OTP Code",
+                text: `Use this OTP to log in: ${generatedOTP}`,
+                icon: "info",
+                confirmButtonColor: "#54388b",
+                confirmButtonText: "OK"
+            }).then(() => {
+                window.location.href = "otp.html";
+            });
+        } else {
+            errorMsg.textContent = "This number is not registered.";
+        }
+    } catch (error) {
+        console.error("Error logging in user:", error);
+        errorMsg.textContent = "Error validating user. Please try again.";
+    }
+}
+
+
+// async function getLoggedInUser() {
+//     try {
+//         let response = await fetch("http://localhost:8083/api/users/current", {
+//             method: "GET",
+//             credentials: "include"
+//         });
+
+//         if (response.ok) {
+//             let user = await response.json();
+//             console.log("Logged in user:", user);
+//         } else {
+//             console.log("User not logged in");
+//         }
+//     } catch (error) {
+//         console.error("Error fetching user:", error);
+//     }
+// }
+
+// // Call this function on page load
+// getLoggedInUser();
+
+
+
+
+// async function logout() {
+//     await fetch("http://localhost:8083/api/users/logout", {
+//         method: "POST",
+//         credentials: "include"
+//     });
+
+//     localStorage.clear();
+//     window.location.href = "login.html";
+// }
+
+
 
     </script>
 

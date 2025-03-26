@@ -52,8 +52,8 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
-            max-width: 500px;  /* Limits max width but keeps it responsive */
-            width: 100%; /* Ensures it adapts to smaller screens */
+            max-width: 500px;  
+            width: 100%; 
         }
         .recharge-section button {
             background: #54388b;
@@ -244,7 +244,7 @@
                         <a class="nav-link" href="./Recharge.html"><i class="bi bi-lightning-fill"></i> Recharge</a>
                     </li>
                     <li class="nav-item"></li>
-                        <a class="nav-link" href="#"><i class="bi bi-sim"></i> Get SIM</a>
+                        <a class="nav-link" href="./getSIM.html"><i class="bi bi-sim"></i> Get SIM</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -252,7 +252,7 @@
                             <i class="bi bi-person-circle"></i> <span id="loggedInUser">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="./userProfileSettings.html"><i class="bi bi-gear"></i> Settings</a></li>
                             <li><a class="dropdown-item" href="#" style="color: red;" onclick="logoutUser()"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                         </ul>
                     </li>
@@ -307,14 +307,14 @@
     </section>
     
     <!-- Recharge Section -->
-    <!-- <section class="container text-center my-4">
+    <section class="container text-center my-4">
         <div class="recharge-section mx-auto p-3 p-md-4">
             <h2>Recharge Mobile</h2>
             <input type="text" id="phoneNo" class="form-control mb-2" placeholder="Enter Mobile Number">
             <p id="errorMessage" class="text-danger mt-2"></p>
             <button class="btn btn-primary w-100" onclick="validateAndCheckUser()">Recharge Now</button>
         </div>
-    </section> -->
+    </section>
     
 
     <!-- Popular Plans Section -->
@@ -450,12 +450,7 @@
 
 
     <script>
-        // document.querySelectorAll('.claim-offer').forEach(button => {
-        //     button.addEventListener('click', function() {
-        //         startConfetti();
-        //         setTimeout(stopConfetti, 3000);
-        //     });
-        // });
+        
     
         function startConfetti() {
             const canvas = document.getElementById("confetti-canvas");
@@ -490,39 +485,41 @@
         }
     });
 
+    async function validateAndCheckUser() {
+        let phoneInput = document.getElementById("phoneNo");
+        let phone = phoneInput.value.trim();
+        let errorMessage = document.getElementById("errorMessage");
+
+        let phoneRegex = /^[6-9]\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            errorMessage.textContent = "Invalid phone number! Enter a valid 10-digit number.";
+            return;
+        }
+
+        try {
+            let response = await fetch("user.json");
+            let users = await response.json();
+            console.log(users);
+            let userExists = users.some(user => user.number === phone);
+            if (userExists) {
+                errorMessage.textContent = ""; 
+                window.location.href = "Recharge.html"; 
+            } else {
+                errorMessage.textContent = "Phone number not registered!";
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            errorMessage.textContent = "Error fetching user data. Try again later.";
+        }
+    }
+
      function logoutUser() {
-        localStorage.removeItem("phoneNo"); 
-        // localStorage.removeItem("loggedInUser").name;
+        localStorage.removeItem("phoneNo");
+        localStorage.removeItem("loggedInUser"); 
+
         window.location.href = "userLogin.html"; 
     }
 
-    // async function validateAndCheckUser() {
-    //     let phoneInput = document.getElementById("phoneNo");
-    //     let phone = phoneInput.value.trim();
-    //     let errorMessage = document.getElementById("errorMessage");
-
-    //     let phoneRegex = /^[6-9]\d{9}$/;
-    //     if (!phoneRegex.test(phone)) {
-    //         errorMessage.textContent = "Invalid phone number! Enter a valid 10-digit number.";
-    //         return;
-    //     }
-
-    //     try {
-    //         let response = await fetch("user.json");
-    //         let users = await response.json();
-    //         console.log(users);
-    //         let userExists = users.some(user => user.number === phone);
-    //         if (userExists) {
-    //             errorMessage.textContent = ""; 
-    //             window.location.href = "Recharge.html"; 
-    //         } else {
-    //             errorMessage.textContent = "Phone number not registered!";
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching user data:", error);
-    //         errorMessage.textContent = "Error fetching user data. Try again later.";
-    //     }
-    // }
 
     </script>
     
